@@ -1,6 +1,7 @@
 # Open Source Face Image Quality (OFIQ) - Unofficial ZeroMQ/Python fork
 
 The intended purpose of this unofficial fork/branch is to make OFIQ more easily/efficiently usable from Python, and also to expose additional `OFIQ_LIB::Session` data.
+Note that this is currently mainly meant for internal use, so the documentation is rather minimal and there are some caveats regarding the dependencies (see blow).
 
 **Quick start:** Build OFIQ as per usual, then see the documentation at the top of [python/ofiq_zmq.py](python/ofiq_zmq.py).
 
