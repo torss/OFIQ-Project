@@ -1,7 +1,11 @@
 """OFIQ can be used via this Python module.
 
-Note that parts of this Python module rely on the "fiqat" (FIQA Toolkit) available here:
+Note that parts of this Python module rely on the FIQA Toolkit "fiqat", available here:
 <https://share.nbl.nislab.no/g03-03-sample-quality/face-image-quality-toolkit>
+
+Besides "fiqat", the required Python packages are:
+- https://pypi.org/project/numpy/
+- https://pypi.org/project/pyzmq/
 
 The OfiqZmq class acts as a client to the OFIQ_zmq_app C++ program (built from OFIQlib/src/OFIQ_zmq_app.cpp).
 The start & shutdown of OFIQ_zmq_app is handled by the Python side,
