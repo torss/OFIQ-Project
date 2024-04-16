@@ -5,9 +5,9 @@ Note that this is currently mainly meant for internal use, so the documentation 
 
 **Quick start:** Build OFIQ as per usual, then see the documentation at the top of [python/ofiq_zmq.py](python/ofiq_zmq.py).
 
-**Python dependencies:** The Python side ([python/ofiq_zmq.py](python/ofiq_zmq.py)) currently requires an installation of the ["fiqat" (FIQA Toolkit)](https://share.nbl.nislab.no/g03-03-sample-quality/face-image-quality-toolkit).
+**Python dependencies:** The Python side ([python/ofiq_zmq.py](python/ofiq_zmq.py)) currently requires an installation of the [FIQA Toolkit "fiqat"](https://share.nbl.nislab.no/g03-03-sample-quality/face-image-quality-toolkit).
 This requirement could be removed if desired, as it is mainly used to handle image loading.
-Besides that it requires the packages [numpy](https://pypi.org/project/numpy/) (tested version `1.23.5`) and [pyzmq](https://pypi.org/project/pyzmq/) (tester version `25.0.2`).
+Besides that it requires the packages [numpy](https://pypi.org/project/numpy/) (tested version `1.23.5`) and [pyzmq](https://pypi.org/project/pyzmq/) (tested version `25.0.2`).
 The tested Python version is `3.9.16`.
 
 **Added C++ dependencies:** The OFIQ build now requires [ZeroMQ](https://zeromq.org/) (specifically the [C version, i.e. "libzmq"](https://zeromq.org/languages/c/#libzmq)), which should however be handled automatically by the Conan package manager (i.e. [zeromq/4.3.5](https://conan.io/center/recipes/zeromq?version=4.3.5) has been added to the [conan/conanfile.txt](conan/conanfile.txt)).
