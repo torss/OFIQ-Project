@@ -7,8 +7,8 @@ The intended purpose of this unofficial fork/branch is to make OFIQ more easily/
 **Python dependencies:** The Python side ([python/ofiq_zmq.py](python/ofiq_zmq.py)) currently requires an installation of the ["fiqat" (FIQA Toolkit)](https://share.nbl.nislab.no/g03-03-sample-quality/face-image-quality-toolkit).
 This requirement could be removed if desired, as it is mainly used to handle image loading.
 
-**Added C++ dependencies:** The OFIQ build now requires `zeromq`, which should however be handled automatically by the Conan package manager (i.e. `zeromq/4.3.5` has been added to the [conan/conanfile.txt](conan/conanfile.txt)).
-But note that the build now also requires C++20 (`CMAKE_CXX_STANDARD 20`), albeit only for `std::endian` in the new [OFIQlib/src/OFIQ_zmq_app.cpp](OFIQlib/src/OFIQ_zmq_app.cpp) file.
+**Added C++ dependencies:** The OFIQ build now requires [ZeroMQ](https://zeromq.org/) (specifically the [C version, i.e. "libzmq"](https://zeromq.org/languages/c/#libzmq)), which should however be handled automatically by the Conan package manager (i.e. [zeromq/4.3.5](https://conan.io/center/recipes/zeromq?version=4.3.5) has been added to the [conan/conanfile.txt](conan/conanfile.txt)).
+But note that the build now also requires C++20 (`CMAKE_CXX_STANDARD 20`), albeit only for [std::endian](https://en.cppreference.com/w/cpp/types/endian) in the new [OFIQlib/src/OFIQ_zmq_app.cpp](OFIQlib/src/OFIQ_zmq_app.cpp) file.
 
 **Details & extensibility to other languages:** To facilitate the Python usage, this adds a C++ executable target with the file [OFIQlib/src/OFIQ_zmq_app.cpp](OFIQlib/src/OFIQ_zmq_app.cpp), which acts as a ZeroMQ server (`ZMQ_REP`) through which OFIQ can be used.
 The single added client (`ZMQ_REQ`) is the Python module [python/ofiq_zmq.py](python/ofiq_zmq.py), which controls the start/stop of the `OFIQ_zmq_app` executable.
