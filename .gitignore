@@ -1,0 +1,7 @@
+build/
+data/models/*/
+data/tests/images/*.png
+data/tests/images/LICENSE.md
+extern/
+install_x86_64/
+install_x86_64_linux/

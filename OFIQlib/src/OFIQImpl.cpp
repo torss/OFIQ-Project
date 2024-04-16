@@ -177,7 +177,51 @@ ReturnStatus OFIQImpl::vectorQuality(
     const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments)
 {
     auto session = Session(image, assessments);
+    return vectorQualityViaSession(session);
+}
 
+ReturnStatus OFIQImpl::vectorQuality(
+    const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments, OFIQ::ExposedSession& exposedSession)
+{
+    auto session = new Session(image, assessments);
+    exposedSession.session = (void*)session;
+    return vectorQualityViaSession(*session);
+}
+
+ExposedSession::~ExposedSession() {
+    delete (Session*)session;
+}
+std::vector<BoundingBox> ExposedSession::getDetectedFaces() {
+    return ((Session*)session)->getDetectedFaces();
+}
+std::array<double, 3> ExposedSession::getPose() {
+    return ((Session*)session)->getPose();
+}
+FaceLandmarks ExposedSession::getLandmarks() {
+    return ((Session*)session)->getLandmarks();
+}
+FaceLandmarks ExposedSession::getAlignedFaceLandmarks() {
+    return ((Session*)session)->getAlignedFaceLandmarks();
+}
+cv::Mat ExposedSession::getAlignedFaceTransformationMatrix() {
+    return ((Session*)session)->getAlignedFaceTransformationMatrix();
+}
+cv::Mat ExposedSession::getAlignedFace() {
+    return ((Session*)session)->getAlignedFace();
+}
+cv::Mat ExposedSession::getAlignedFaceLandmarkedRegion() {
+    return ((Session*)session)->getAlignedFaceLandmarkedRegion();
+}
+cv::Mat ExposedSession::getFaceParsingImage() {
+    return ((Session*)session)->getFaceParsingImage();
+}
+cv::Mat ExposedSession::getFaceOcclusionSegmentationImage() {
+    return ((Session*)session)->getFaceOcclusionSegmentationImage();
+}
+
+ReturnStatus OFIQImpl::vectorQualityViaSession(
+    Session& session)
+{
     try
     {
         log("perform preprocessing:\n");

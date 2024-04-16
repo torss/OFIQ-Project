@@ -35,6 +35,8 @@
 #include <utility>
 #include <vector>
 
+#include <opencv2/opencv.hpp>
+
  /**
   * Namespace for OFIQ API.
   */
@@ -472,6 +474,20 @@ namespace OFIQ
         }
     };
 
+    struct ExposedSession {
+        void* session;
+
+        ~ExposedSession();
+        std::vector<BoundingBox> getDetectedFaces();
+        std::array<double, 3> getPose();
+        FaceLandmarks getLandmarks();
+        FaceLandmarks getAlignedFaceLandmarks();
+        cv::Mat getAlignedFaceTransformationMatrix();
+        cv::Mat getAlignedFace();
+        cv::Mat getAlignedFaceLandmarkedRegion();
+        cv::Mat getFaceParsingImage();
+        cv::Mat getFaceOcclusionSegmentationImage();
+    };
 }
 
 #endif /* OFIQ_STRUCTS_H */

@@ -116,6 +116,30 @@ namespace OFIQ
             const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments) = 0;
 
         /**
+         * @brief  This function takes an image and outputs quality information.
+         *
+         * @details The quality assessment should be performed on the largest detected face.
+         *
+         * @param[in] image
+         * Single face image
+         *
+         * @param[out] assessments
+         * An ImageQualityAssessments structure.
+         * The implementation should populate
+         * 1) the bounding box and
+         * 2) those items in the QualityAssessments object that the
+         * developer chooses to implement
+         * 3) face landmarks
+         *
+         * @param[out] session
+         * Ad-hoc struct that exposes internal Session data beyond the assessments.
+         * 
+         * @return OFIQ::ReturnStatus
+         */
+        virtual OFIQ::ReturnStatus vectorQuality(
+            const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments, OFIQ::ExposedSession& session) = 0;
+
+        /**
          * @brief
          * Factory method to return a shared pointer to the Interface object.
          * @details

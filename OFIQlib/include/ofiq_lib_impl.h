@@ -88,6 +88,18 @@ namespace OFIQ_LIB
         OFIQ::ReturnStatus vectorQuality(
             const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments) override;
 
+
+        /**
+         * @brief Run the computation of all measures set in the configuration.
+         * 
+         * @param[in] image Input image.
+         * @param[out] assessments Container to store the resulting scores.
+         * @param[out] session Ad-hoc struct that exposes internal Session data beyond the assessments.
+         * @return OFIQ::ReturnStatus 
+         */
+        virtual OFIQ::ReturnStatus vectorQuality(
+            const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments, OFIQ::ExposedSession& session) override;
+
     private:
         /**
          * @brief Pointer to the executor instance, see \link OFIQ_LIB::modules::measures::Executor \endlink.
@@ -160,6 +172,15 @@ namespace OFIQ_LIB
          * OFIQImpl::performPreprocessing()\endlink method
          */
         void alignFaceImage(Session& session);
+
+        /**
+         * @brief Run the computation of all measures set in the configuration.
+         * 
+         * @param[inout] session Session Used Session object.
+         * @return OFIQ::ReturnStatus 
+         */
+        OFIQ::ReturnStatus vectorQualityViaSession(
+            OFIQ_LIB::Session& image);
     };
 }
 

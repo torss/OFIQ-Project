@@ -4,7 +4,7 @@ list(APPEND CMAKE_MODULE_PATH
 )
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/conan")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
 set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
@@ -27,6 +27,7 @@ find_package(OpenCV REQUIRED COMPONENTS core calib3d imgcodecs imgproc highgui d
 find_package(spdlog REQUIRED)
 find_package(taocpp-json REQUIRED)
 find_package(magic_enum REQUIRED)
+find_package(ZeroMQ REQUIRED)
 
 # Find all source files
 
@@ -92,7 +93,7 @@ list(APPEND module_sources
 )
 
 
-list(APPEND OFIQ_LINK_LIB_LIST 
+list(APPEND OFIQ_LINK_LIB_LIST
 	opencv::opencv
 	spdlog::spdlog
 	taocpp::json
@@ -130,6 +131,15 @@ add_executable(OFIQSampleApp ${OFIQLIB_SOURCE_DIR}/src/OFIQSampleApp.cpp)
 target_link_libraries(OFIQSampleApp
 	PRIVATE ofiq_lib
 	PRIVATE magic_enum::magic_enum
+	PRIVATE opencv::opencv # Only required in this fork/branch due to changes made for OFIQ_zmq_app.cpp.
+)
+
+add_executable(OFIQ_zmq_app ${OFIQLIB_SOURCE_DIR}/src/OFIQ_zmq_app.cpp)
+target_link_libraries(OFIQ_zmq_app
+	PRIVATE ofiq_lib
+	PRIVATE magic_enum::magic_enum
+	PRIVATE opencv::opencv
+	PRIVATE libzmq-static
 )
 
 
@@ -152,6 +162,11 @@ install(TARGETS OFIQSampleApp
 	DESTINATION Release/bin
 )
 
+install(TARGETS OFIQ_zmq_app
+	CONFIGURATIONS Release
+	DESTINATION Release/bin
+)
+
 install(TARGETS ofiq_lib
 	CONFIGURATIONS Release
     DESTINATION Release/lib
@@ -165,6 +180,11 @@ install(TARGETS ofiq_lib
 )
 
 install(TARGETS OFIQSampleApp
+	CONFIGURATIONS Debug
+	DESTINATION Debug/bin
+)
+
+install(TARGETS OFIQ_zmq_app
 	CONFIGURATIONS Debug
 	DESTINATION Debug/bin
 )

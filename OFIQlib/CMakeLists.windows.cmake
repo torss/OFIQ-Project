@@ -3,7 +3,7 @@ message(STATUS  "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/conan")
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/conan")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Configure built shared libraries in top-level lib directory
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -25,6 +25,7 @@ find_package(OpenCV REQUIRED COMPONENTS core calib3d imgcodecs imgproc highgui d
 find_package(spdlog REQUIRED)
 find_package(taocpp-json REQUIRED)
 find_package(magic_enum REQUIRED)
+find_package(ZeroMQ REQUIRED)
 
 # Find all source files
 add_definitions(-DOFIQ_EXPORTS)
@@ -187,6 +188,13 @@ target_link_libraries(OFIQSampleApp
 	PRIVATE magic_enum::magic_enum ${OFIQ_LINK_LIB_LIST}
 )
 
+add_executable(OFIQ_zmq_app ${OFIQLIB_SOURCE_DIR}/src/OFIQ_zmq_app.cpp)
+target_link_libraries(OFIQ_zmq_app
+	PRIVATE ofiq_lib
+	PRIVATE magic_enum::magic_enum ${OFIQ_LINK_LIB_LIST}
+	# PRIVATE opencv::opencv # Included in OFIQ_LINK_LIB_LIST.
+	PRIVATE libzmq-static
+)
 
 set_target_properties(ofiq_lib 
         PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_LIST}"
@@ -199,6 +207,9 @@ install(TARGETS OFIQSampleApp
         RUNTIME DESTINATION $<CONFIG>/bin
 )
 
+install(TARGETS OFIQ_zmq_app
+        RUNTIME DESTINATION $<CONFIG>/bin
+)
 
 get_property(IMPORTED_LIB_LOCATION TARGET onnxruntime PROPERTY IMPORTED_LOCATION)
 install(FILES "${IMPORTED_LIB_LOCATION}" DESTINATION "$<CONFIG>/bin")
