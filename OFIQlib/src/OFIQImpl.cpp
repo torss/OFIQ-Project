@@ -188,34 +188,34 @@ ReturnStatus OFIQImpl::vectorQuality(
     return vectorQualityViaSession(*session);
 }
 
-ExposedSession::~ExposedSession() {
+OFIQ_EXPORT ExposedSession::~ExposedSession() {
     delete (Session*)session;
 }
-std::vector<BoundingBox> ExposedSession::getDetectedFaces() {
+OFIQ_EXPORT std::vector<BoundingBox> ExposedSession::getDetectedFaces() {
     return ((Session*)session)->getDetectedFaces();
 }
-std::array<double, 3> ExposedSession::getPose() {
+OFIQ_EXPORT std::array<double, 3> ExposedSession::getPose() {
     return ((Session*)session)->getPose();
 }
-FaceLandmarks ExposedSession::getLandmarks() {
+OFIQ_EXPORT FaceLandmarks ExposedSession::getLandmarks() {
     return ((Session*)session)->getLandmarks();
 }
-FaceLandmarks ExposedSession::getAlignedFaceLandmarks() {
+OFIQ_EXPORT FaceLandmarks ExposedSession::getAlignedFaceLandmarks() {
     return ((Session*)session)->getAlignedFaceLandmarks();
 }
-cv::Mat ExposedSession::getAlignedFaceTransformationMatrix() {
+OFIQ_EXPORT cv::Mat ExposedSession::getAlignedFaceTransformationMatrix() {
     return ((Session*)session)->getAlignedFaceTransformationMatrix();
 }
-cv::Mat ExposedSession::getAlignedFace() {
+OFIQ_EXPORT cv::Mat ExposedSession::getAlignedFace() {
     return ((Session*)session)->getAlignedFace();
 }
-cv::Mat ExposedSession::getAlignedFaceLandmarkedRegion() {
+OFIQ_EXPORT cv::Mat ExposedSession::getAlignedFaceLandmarkedRegion() {
     return ((Session*)session)->getAlignedFaceLandmarkedRegion();
 }
-cv::Mat ExposedSession::getFaceParsingImage() {
+OFIQ_EXPORT cv::Mat ExposedSession::getFaceParsingImage() {
     return ((Session*)session)->getFaceParsingImage();
 }
-cv::Mat ExposedSession::getFaceOcclusionSegmentationImage() {
+OFIQ_EXPORT cv::Mat ExposedSession::getFaceOcclusionSegmentationImage() {
     return ((Session*)session)->getFaceOcclusionSegmentationImage();
 }
 

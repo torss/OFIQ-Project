@@ -48,6 +48,20 @@
  */
 namespace OFIQ
 {
+    struct ExposedSession {
+        void* session;
+
+        OFIQ_EXPORT ~ExposedSession();
+        OFIQ_EXPORT std::vector<BoundingBox> getDetectedFaces();
+        OFIQ_EXPORT std::array<double, 3> getPose();
+        OFIQ_EXPORT FaceLandmarks getLandmarks();
+        OFIQ_EXPORT FaceLandmarks getAlignedFaceLandmarks();
+        OFIQ_EXPORT cv::Mat getAlignedFaceTransformationMatrix();
+        OFIQ_EXPORT cv::Mat getAlignedFace();
+        OFIQ_EXPORT cv::Mat getAlignedFaceLandmarkedRegion();
+        OFIQ_EXPORT cv::Mat getFaceParsingImage();
+        OFIQ_EXPORT cv::Mat getFaceOcclusionSegmentationImage();
+    };
 
     /**
      * @brief
