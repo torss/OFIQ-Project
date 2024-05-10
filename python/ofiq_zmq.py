@@ -66,6 +66,7 @@ import subprocess
 import io
 import struct
 from enum import IntEnum
+import math
 
 # External imports:
 import numpy as np
@@ -317,11 +318,21 @@ class Reader:
       status_code_int = self.read_scalar('uint8_t')
       status_code = OfiqQualityMeasureReturnCode(status_code_int)
       scalar_score_double = self.read_scalar('double')
-      scalar_score_int = int(scalar_score_double)
-      if scalar_score_int != int(round(scalar_score_double)):
-        raise OfiqZmqException(
-            'Reader.read_ofiq_quality_assessments unexpectedly received a scalar_score_double'
-            ' that does not represent an integer', ('scalar_score_double', scalar_score_double))
+      if math.isnan(scalar_score_double):
+        fiqat.term.cprint(
+            'WARNING - OFIQ-ZeroMQ Reader.read_ofiq_quality_assessments'
+            f' - {str(measure_id)}'
+            ' - Unexpectedly received a NaN scalar_score_double.'
+            ' Will output a -1 scalar_score_int and FAILURE_TO_ASSESS status_code.', 'yellow')
+        scalar_score_int = -1
+        status_code = OfiqQualityMeasureReturnCode.FAILURE_TO_ASSESS
+      else:
+        scalar_score_int = int(scalar_score_double)
+        if scalar_score_int != int(round(scalar_score_double)):
+          raise OfiqZmqException(
+              'Reader.read_ofiq_quality_assessments unexpectedly received a scalar_score_double'
+              ' that does not represent an integer', ('measure_id', measure_id),
+              ('scalar_score_double', scalar_score_double))
       raw_score = self.read_scalar('double')
       quality_assessments[measure_id] = OfiqQualityMeasureResult(status_code, scalar_score_int, raw_score)
     return quality_assessments
