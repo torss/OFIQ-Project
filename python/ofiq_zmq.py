@@ -309,6 +309,9 @@ class Reader:
     face_detector_type = OfiqFaceDetectorType(face_detector)
     return OfiqBoundingBox(xleft, ytop, width, height, face_detector_type)
 
+  def skip_ofiq_bounding_box(self):
+    self.file.seek(2 * 4 + 1, 1)
+
   def read_ofiq_quality_assessments(self) -> dict:
     quality_assessments = {}
     count = self.read_scalar('uint16_t')
@@ -337,6 +340,10 @@ class Reader:
       quality_assessments[measure_id] = OfiqQualityMeasureResult(status_code, scalar_score_int, raw_score)
     return quality_assessments
 
+  def skip_ofiq_quality_assessments(self):
+    count = self.read_scalar('uint16_t')
+    self.file.seek(count * (2 + 1 + 8 + 8), 1)
+
   def read_ofiq_detected_faces(self) -> list[OfiqBoundingBox]:
     detected_faces = []
     count = self.read_scalar('uint16_t')
@@ -344,11 +351,19 @@ class Reader:
       detected_faces.append(self.read_ofiq_bounding_box())
     return detected_faces
 
+  def skip_ofiq_detected_faces(self):
+    count = self.read_scalar('uint16_t')
+    for _ in range(count):
+      self.skip_ofiq_bounding_box()
+
   def read_ofiq_pose(self) -> tuple:
     angle1 = self.read_scalar('double')
     angle2 = self.read_scalar('double')
     angle3 = self.read_scalar('double')
     return (angle1, angle2, angle3)
+
+  def skip_ofiq_pose(self):
+    self.file.seek(8 * 3, 1)
 
   def read_ofiq_landmarks(self) -> OfiqFaceLandmarks:
     landmark_type_int = self.read_scalar('uint8_t')
@@ -360,6 +375,11 @@ class Reader:
       point_y = self.read_scalar('int16_t')
       landmark_points.append(OfiqLandmarkPoint(point_x, point_y))
     return OfiqFaceLandmarks(landmark_type, landmark_points)
+
+  def skip_ofiq_landmarks(self):
+    self.file.seek(1, 1)
+    count = self.read_scalar('uint32_t')
+    self.file.seek(count * (2 * 2), 1)
 
   def read_cv_mat(self) -> Optional[np.ndarray]:
     cols = self.read_scalar('int32_t')
@@ -400,6 +420,31 @@ class Reader:
     unpacked_data = struct.unpack(struct_fmt[0] + struct_fmt[1] * value_count, file.read(struct_size * value_count))
     result = np.array(unpacked_data, dtype).reshape(shape)
     return result
+
+  def skip_cv_mat(self):
+    cols = self.read_scalar('int32_t')
+    if cols == -1:  # Check for the unsupported-cv::Mat marker.
+      return
+    rows = self.read_scalar('int32_t')
+    channels = self.read_scalar('int32_t')
+    depth = self.read_scalar('uint8_t')
+    if depth == 0:  # CV_8U
+      depth_size = 1
+    elif depth == 1:  # CV_8S
+      depth_size = 1
+    elif depth == 2:  # CV_16U
+      depth_size = 2
+    elif depth == 3:  # CV_16S
+      depth_size = 2
+    elif depth == 4:  # CV_32S
+      depth_size = 4
+    elif depth == 5:  # CV_32F
+      depth_size = 4
+    elif depth == 6:  # CV_64F
+      depth_size = 8
+    else:
+      raise OfiqZmqException('Reader.skip_cv_mat - Invalid depth value', depth)
+    self.file.seek(rows * cols * channels * depth_size, 1)
 
   def read_cv_mat_as_image(self) -> Optional[fiqat.TypedNpImage]:
     image = self.read_cv_mat()
@@ -512,7 +557,21 @@ class OfiqZmq:
     self.socket.set(zmq.RCVTIMEO, -1)
     return ping_response
 
-  def process_image(self, input_image: Union[fiqat.InputImage, str]) -> Optional[dict]:
+  def process_image(
+      self,
+      input_image: Union[fiqat.InputImage, str],
+      only: Optional[set] = None,
+      skip: Optional[set] = None,
+  ) -> Optional[dict]:
+    """
+    The optional "only" and "skip" parameters can each be used to pass a set of keys for the result dictionary.
+    If "only" is specified, then only these parts will be included in the result dictionary.
+    If "skip" is specified, then these parts will be skipped in the result dictionary.
+    If both are specified, this is equal to specifying "only" without the keys in "skip".
+    Corresponding internal parsing functions will do as little work as possible for the irrelevant parts,
+    which can slightly speed up this function (depending on what is skipped).
+    Invalid keys in "only" or "skip" are sliently ignored.
+    """
     if isinstance(input_image, str):
       input_image = Path(input_image)
     # - #
@@ -538,29 +597,79 @@ class OfiqZmq:
     if processing_success == 0:
       results = None
     else:
+      active_keys = {
+          'bounding_box',
+          'quality_assessments',
+          'detected_faces',
+          'pose',
+          'face_landmarks',
+          'aligned_face_landmarks',
+          'aligned_face_transformation_matrix',
+          'aligned_face',
+          'aligned_face_landmarked_region',
+          'face_parsing_image',
+          'face_occlusion_segmentation_image',
+      }
+      if only is not None:
+        active_keys &= only
+      if skip is not None:
+        active_keys -= skip
       results = {}
       # Result data part 1: OFIQ::FaceImageQualityAssessment::boundingBox (OFIQ::BoundingBox)
-      results['bounding_box'] = reader.read_ofiq_bounding_box()
+      if 'bounding_box' in active_keys:
+        results['bounding_box'] = reader.read_ofiq_bounding_box()
+      else:
+        reader.skip_ofiq_bounding_box()
       # Result data part 2: OFIQ::FaceImageQualityAssessment::qAssessments (OFIQ::QualityAssessments)
-      results['quality_assessments'] = reader.read_ofiq_quality_assessments()
+      if 'quality_assessments' in active_keys:
+        results['quality_assessments'] = reader.read_ofiq_quality_assessments()
+      else:
+        reader.skip_ofiq_quality_assessments()
       # Result data part 3: OFIQ_LIB::Session::getDetectedFaces() (std::vector<OFIQ::BoundingBox>)
-      results['detected_faces'] = reader.read_ofiq_detected_faces()
+      if 'detected_faces' in active_keys:
+        results['detected_faces'] = reader.read_ofiq_detected_faces()
+      else:
+        reader.skip_ofiq_detected_faces()
       # Result data part 4: OFIQ_LIB::Session::getPose() (OFIQ::EulerAngle)
-      results['pose'] = reader.read_ofiq_pose()
+      if 'pose' in active_keys:
+        results['pose'] = reader.read_ofiq_pose()
+      else:
+        reader.skip_ofiq_pose()
       # Result data part 5: OFIQ_LIB::Session::getLandmarks() (OFIQ::FaceLandmarks)
-      results['face_landmarks'] = reader.read_ofiq_landmarks()
+      if 'face_landmarks' in active_keys:
+        results['face_landmarks'] = reader.read_ofiq_landmarks()
+      else:
+        reader.skip_ofiq_landmarks()
       # Result data part 6: OFIQ_LIB::Session::getAlignedFaceLandmarks() (OFIQ::FaceLandmarks)
-      results['aligned_face_landmarks'] = reader.read_ofiq_landmarks()
+      if 'aligned_face_landmarks' in active_keys:
+        results['aligned_face_landmarks'] = reader.read_ofiq_landmarks()
+      else:
+        reader.skip_ofiq_landmarks()
       # Result data part 7: OFIQ_LIB::Session::getAlignedFaceTransformationMatrix() (cv::Mat)
-      results['aligned_face_transformation_matrix'] = reader.read_cv_mat()
+      if 'aligned_face_transformation_matrix' in active_keys:
+        results['aligned_face_transformation_matrix'] = reader.read_cv_mat()
+      else:
+        reader.skip_cv_mat()
       # Result data part 8: OFIQ_LIB::Session::getAlignedFace() (cv::Mat)
-      results['aligned_face'] = reader.read_cv_mat_as_image()
+      if 'aligned_face' in active_keys:
+        results['aligned_face'] = reader.read_cv_mat_as_image()
+      else:
+        reader.skip_cv_mat()
       # Result data part 9: OFIQ_LIB::Session::getAlignedFaceLandmarkedRegion() (cv::Mat)
-      results['aligned_face_landmarked_region'] = reader.read_cv_mat_as_image()
+      if 'aligned_face_landmarked_region' in active_keys:
+        results['aligned_face_landmarked_region'] = reader.read_cv_mat_as_image()
+      else:
+        reader.skip_cv_mat()
       # Result data part 10: OFIQ_LIB::Session::getFaceParsingImage() (cv::Mat)
-      results['face_parsing_image'] = reader.read_cv_mat_as_image()
+      if 'face_parsing_image' in active_keys:
+        results['face_parsing_image'] = reader.read_cv_mat_as_image()
+      else:
+        reader.skip_cv_mat()
       # Result data part 11: OFIQ_LIB::Session::getFaceOcclusionSegmentationImage() (cv::Mat)
-      results['face_occlusion_segmentation_image'] = reader.read_cv_mat_as_image()
+      if 'face_occlusion_segmentation_image' in active_keys:
+        results['face_occlusion_segmentation_image'] = reader.read_cv_mat_as_image()
+      else:
+        reader.skip_cv_mat()
     reader.check_end(CommandType.PROCESS_IMAGE)
     return results
 
