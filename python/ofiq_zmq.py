@@ -396,11 +396,9 @@ class Reader:
     struct_fmt = struct_type_fmts[struct_type]
     struct_size = struct_type_sizes[struct_type]
     file = self.file
-    result = np.zeros(shape, dtype)
-    for row in range(rows):
-      for col in range(cols):
-        for channel in range(channels):
-          result[row, col, channel] = struct.unpack(struct_fmt, file.read(struct_size))[0]
+    value_count = rows * cols * channels
+    unpacked_data = struct.unpack(struct_fmt[0] + struct_fmt[1] * value_count, file.read(struct_size * value_count))
+    result = np.array(unpacked_data, dtype).reshape(shape)
     return result
 
   def read_cv_mat_as_image(self) -> Optional[fiqat.TypedNpImage]:
