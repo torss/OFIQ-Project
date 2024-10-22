@@ -40,16 +40,42 @@ namespace OFIQ_LIB::modules::measures
 
     static const auto qualityMeasure = OFIQ::QualityMeasure::NaturalColour;
 
+    static bool IsColoured(const cv::Mat& image)
+    {
+        int channelCount = image.channels();
+
+        if (channelCount != 3)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < image.rows; i++)
+        {
+            for (int j = 0; j < image.cols; j++)
+            {
+                uchar c0 = image.data[channelCount*(i*image.cols+j)+0];
+                uchar c1 = image.data[channelCount*(i*image.cols+j)+1];
+                uchar c2 = image.data[channelCount*(i*image.cols+j)+2];
+                if (c0 != c1 || c0 != c2 || c1 != c2)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     NaturalColour::NaturalColour(
-        const Configuration& configuration,
-        Session& session)
-        : Measure{ configuration, session, qualityMeasure }
+        const Configuration& configuration)
+        : Measure{ configuration, qualityMeasure }
     {
         SigmoidParameters defaultValues;
         defaultValues.h = 200.0;
+        defaultValues.a = 1.0;
+        defaultValues.s = -1.0;
         defaultValues.x0 = 0.0;
         defaultValues.w = 10.0;
-        defaultValues.setInverse();
         AddSigmoid(qualityMeasure, defaultValues);
     }
 
@@ -58,13 +84,22 @@ namespace OFIQ_LIB::modules::measures
         auto landmarks = session.getAlignedFaceLandmarks();
         auto alignedFace = session.getAlignedFace();
 
+        if (!IsColoured(alignedFace))
+        {
+            double D = 0.0;
+            SetQualityMeasure(session, qualityMeasure, D, OFIQ::QualityMeasureReturnCode::Success);
+            return;
+        }
+
         cv::Mat cvMask = session.getAlignedFaceLandmarkedRegion();
         cv::Mat faceSegmentation;
         cv::bitwise_and(alignedFace, alignedFace, faceSegmentation, cvMask);
 
         cv::Mat maskedImage = CreateMaskedImage(landmarks, faceSegmentation);
-        OFIQ::LandmarkPoint leftEyeCenter, rightEyeCenter;
-        double interEyeDistance, eyeMouthDistance;
+        OFIQ::LandmarkPoint leftEyeCenter;
+        OFIQ::LandmarkPoint rightEyeCenter;
+        double interEyeDistance;
+        double eyeMouthDistance;
         CalculateReferencePoints(landmarks, leftEyeCenter, rightEyeCenter, interEyeDistance, eyeMouthDistance);
         cv::Rect leftRegionOfInterest;
         cv::Rect rightRegionOfInterest;
@@ -77,7 +112,7 @@ namespace OFIQ_LIB::modules::measures
         SetQualityMeasure(session, qualityMeasure, rawScore, OFIQ::QualityMeasureReturnCode::Success);
     }
 
-    cv::Mat NaturalColour::CreateMaskedImage(const OFIQ::FaceLandmarks& landmarks, const cv::Mat& cvImage)
+    cv::Mat NaturalColour::CreateMaskedImage(const OFIQ::FaceLandmarks& landmarks, const cv::Mat& cvImage) const
     {
         auto cvMask = FaceMeasures::GetFaceMask(landmarks, cvImage.rows, cvImage.cols);
         cv::Mat maskedImage;
@@ -85,7 +120,10 @@ namespace OFIQ_LIB::modules::measures
         return maskedImage;
     }
 
-    cv::Mat NaturalColour::ReduceImageToRegionOfInterest(const cv::Mat maskedImage, const cv::Rect& leftRegionOfInterest, const cv::Rect& rightRegionOfInterest)
+    cv::Mat NaturalColour::ReduceImageToRegionOfInterest(
+        const cv::Mat& maskedImage,
+        const cv::Rect& leftRegionOfInterest,
+        const cv::Rect& rightRegionOfInterest) const
     {
         auto leftRegion = maskedImage(leftRegionOfInterest);
         auto rightRegion = maskedImage(rightRegionOfInterest);
@@ -94,7 +132,7 @@ namespace OFIQ_LIB::modules::measures
         return reducedImage;
     }
 
-    double NaturalColour::CalculateScore(double meanChannelA, double meanChannelB)
+    double NaturalColour::CalculateScore(double meanChannelA, double meanChannelB) const
     {
         auto rawScore = (meanChannelA >= 0 && meanChannelB >= 0)
                           ? sqrt(

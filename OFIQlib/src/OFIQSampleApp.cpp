@@ -157,7 +157,6 @@ int runQuality(
 
         cout << "raw scores:" << strQAresRaw << std::endl;
         cout << "scalar scores:" << strQAresScalar << std::endl;
-
     }
 
     if (faceImageQAs.empty())
@@ -291,7 +290,7 @@ void usage(const string& executable)
 {
     cerr << "Usage: " << executable
          << " -c configDir "
-            "-o outputFile -h outputStem -i inputFile -t numForks"
+            "-o outputFile -h outputStem -i inputFile -cf configFile"
          << endl;
 }
 
@@ -305,7 +304,7 @@ int main(int argc, char* argv[])
     }
 
     string configDir{ "config" };
-    char* outputFile = nullptr;
+    const char* outputFile = nullptr;
     string inputFile;
     string configFile;
 
@@ -352,6 +351,13 @@ int main(int argc, char* argv[])
              << ret.info << endl;
         return FAILURE;
     }
+
+    int major;
+    int minor;
+    int patch;
+    implPtr->getVersion(major, minor, patch);
+    
+    cout << "OFIQ library version: " << major << '.' << minor << '.' << patch << endl;
 
     // write to output file
     if (outputFile != nullptr)

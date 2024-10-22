@@ -74,7 +74,7 @@ namespace OFIQ
          * @param depth of the image
          * @param data of the image.
          */
-        Image(uint16_t width, uint16_t height, uint8_t depth, std::shared_ptr<uint8_t>& data)
+        Image(uint16_t width, uint16_t height, uint8_t depth, const std::shared_ptr<uint8_t>& data)
             : width{width},
               height{height},
               depth{depth},
@@ -222,16 +222,16 @@ namespace OFIQ
         InterEyeDistance = 0x52,
         /** HeadSize*/
         HeadSize = 0x53,
-        /** CropOfTheFaceImage: common measure for {Left,Right,Up,Down}wardCropOfTheFaceImage */
+        /** CropOfTheFaceImage: common measure for {Left,Right}wardCropOfTheFaceImage, MarginAbove, and MarginBelow */
         CropOfTheFaceImage = -0x54, 
         /** LeftwardCropOfTheFaceImage*/
         LeftwardCropOfTheFaceImage = 0x54,
         /** RightwardCropOfTheFaceImage*/
         RightwardCropOfTheFaceImage = 0x55,
-        /** DownwardCropOfTheFaceImage*/
-        DownwardCropOfTheFaceImage = 0x56,
-        /** UpwardCropOfTheFaceImage*/
-        UpwardCropOfTheFaceImage = 0x57,
+        /** MarginAbove */
+        MarginAboveOfTheFaceImage = 0x56,
+        /** MarginBelow */
+        MarginBelowOfTheFaceImage = 0x57,
         /** HeadPose*/
         HeadPose = -0x58,
         /** HeadPoseYaw*/

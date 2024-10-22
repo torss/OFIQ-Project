@@ -43,6 +43,9 @@ namespace OFIQ_LIB
     class PoseEstimatorInterface
     {
     public:
+        /**
+         * The first entry encodes yaw, the second encodes pitch, and the third encodes roll. 
+         */
         using EulerAngle = std::array<double, 3>;
 
         /**
@@ -74,12 +77,12 @@ namespace OFIQ_LIB
          * @brief id of the session that has been used in the latest request, for internal use.
          * 
          */
-        std::string lastSessionId;
+        std::string m_lastSessionId;
 
         /**
          * @brief Container for storing the estimated head orientations.
          * 
          */
-        EulerAngle pose;
+        EulerAngle m_pose;
     };
 }

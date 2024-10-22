@@ -34,13 +34,13 @@ namespace OFIQ_LIB::modules::measures
     static const auto qualityMeasure = OFIQ::QualityMeasure::HeadSize;
     
     HeadSize::HeadSize(
-        const Configuration& configuration,
-        Session& session)
-        : Measure{ configuration, session, qualityMeasure}
+        const Configuration& configuration)
+        : Measure{ configuration, qualityMeasure}
     {
         SigmoidParameters defaultValues;
-        defaultValues.setInverse();
         defaultValues.h = 200;
+        defaultValues.a = 1.0;
+        defaultValues.s = -1.0;
         defaultValues.x0 = 0.0;
         defaultValues.w = 0.05;
         defaultValues.round = true;

@@ -33,208 +33,7 @@
  * standard; see [https://bsi.bund.de/dok/OFIQ-e](https://bsi.bund.de/dok/OFIQ-e).
  * 
  * @includedoc "../../LICENSE.md"
- * 
- * @section sec_compilation Compilation
- * To build OFIQ you need to install Python with pip, cmake and conan.
- * <ul>
- *  <li>Python (version 3.10.12 or higher)</li>
- *  <li>[Download and install cmake](https://cmake.org/) (version 3.26 or higher)</li>
- *  <li>[Download and install conan](https://conan.io/) (version 2.0.17)</li>
- * </ul>
- *
- * @subsection sec_compilation_linux Linux
- * The following has been tested on an Ubuntu 22.04 (64 bit) installation.
- * <br/>
- * Install necessary packages.
- * <pre>
- * $ sudo apt-get install build-essential python3-pip liblapack-dev
- * </pre>
- * To install cmake (in a version 3.26 or higher) use snap (and not apt) as follows.
- * <pre>
- * $ sudo snap install cmake --classic
- * </pre>
- * Conan is installed via Python with 
- * <pre>
- * pip install conan==2.0.17
- * </pre>
- * In order to build OFIQ and installing all required packages via conan run the following.
- * <pre>
- * $ cd <OFIQ-SOURCE>/scripts
- * $ sh build.sh
- * </pre>
- * where <OFIQ-SOURCE> denotes the root folder of the OFIQ source files.
- * <br/>
- * This will create the following output.
- * <table>
- *  <tr>
- *   <td><b>file/directory</b></td>
- *   <td><b>description</b></td>
- *  </tr>
- *  <tr>
- *   <td>build/</td>
- *   <td>Folder with the Linux build including the binaries <code>OFIQSampleApp</code> and <code>libofiq_lib.so</code>.</td>
- *  </tr>
- *  <tr>
- *   <td>build/conan/</td>
- *   <td>Conan cache with packages downloaded.</td>
- *  </tr>
- *  <tr>
- *   <td>install_x86_64_linux/</td>
- *   <td>Folder with the installation including the binaries <code>Release/bin/OFIQSampleApp</code>, 
- *   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.14.1</code>, and the 
- *   header files in <code>Release/include/</code>. </td>
- *  </tr>
- *  <tr>
- *   <td>data/models/</td>
- *   <td>Model files downloaded from the ISO portal during build process (see @ref sec_download_models).</td>
- *  </tr>
- *  <tr>
- *   <td>data/tests/images/</td>
- *   <td>Conformance test images downloaded from the ISO portal (see @ref sec_download_conformance_test_images).</td>
- *  </tr>
- * </table>
- * 
- * @subsection sec_compilation_windows Windows
- * The following has been tested on a Windows 10 (64 bit) installation using a <b>Python installation version 3.11.5</b> 
- * with pip package such that the <code>pip</code> command can be executed from the command prompt. Furthermore, an installation
- * of <b>cmake version 3.29</b> has been used. As the compiler, <b>Microsoft's Visual Studio 2019</b> was used.
- * <br/>
- * <br/>
- * To install conan, run
- * <pre>
- * $ pip install conan==2.0.17
- * </pre>
- * from the command prompt.
- * <br/>
- * <br/>
- * In order to build OFIQ and install all required packages run the following.
- * <pre>
- * $ cd <OFIQ-SOURCE>\scripts\
- * $ .\build.cmd
- * </pre>
- * where <OFIQ-SOURCE> denotes the root folder of the OFIQ source files.
- * <br/>
- * This will create the following output.
- * <table>
- *  <tr>
- *   <td><b>file/directory</b></td>
- *   <td><b>description</b></td>
- *  </tr>
- *  <tr>
- *   <td>build\\build_win\\</td>
- *   <td>Folder with the Visual Studio solution files placed and pre-compilation.</td>
- *  </tr>
- *  <tr>
- *   <td>build\\conan\\</td>
- *   <td>Conan cache with packages downloaded.</td>
- *  </tr>
- *  <tr>
- *   <td>install_x86_64\\</td>
- *   <td>Folder with the OFIQ installation files. This includes the binaries <code>Release\\bin\\OFIQSampleApp</code>, 
- *   <code>Release\\bin\\libofiq_lib.so</code>, <code>Release\\bin\\libonnxruntime.so.1.14.1</code>, and the 
- *   header files in <code>Release\\include\\</code>.</td>
- *  </tr>
- *  <tr>
- *   <td>data\\models\\</td>
- *   <td>Model files downloaded from the ISO portal during build process (see @ref sec_download_models).</td>
- *  </tr>
- *  <tr>
- *   <td>data\\tests\\images\\</td>
- *   <td>Conformance test images downloaded from the ISO portal (see @ref sec_download_conformance_test_images).</td>
- *  </tr>
- * </table>
- * 
- * @subsection sec_download_models Download model files
- * To run OFIQ, the model files from [the ISO portal](https://standards.iso.org/iso-iec/29794/-5/ed-1/en/OFIQ-MODELS.zip) 
- * need to be downloaded and be placed in the <code>./data/models/</code> directory. 
- * This step is integrated in the cmake building process.
- * 
- * @subsection sec_download_conformance_test_images Download conformance test images
- * To run conformance tests, the conformance test
- * images need to be downloaded from 
- * [the ISO portal](https://standards.iso.org/iso-iec/29794/-5/ed-1/en/OFIQ-IMAGES.zip) 
- * and be placed in the <code>./data/tests/images/</code> directory.
- * This step is integrated in the cmake building process.
- *
- * @section sec_conformance_test Running conformance tests
- * The conformance tests are executed by going to <code><OFIQ-SOURCE>/scripts/</code> 
- * and run <code>conformance_tests.cmd</code> (Windows) or 
- * <code>conformance_tests.sh</code> (Linux).
- * 
- * @section sec_sample Running the sample executable
- * In this section, we describe how to run the sample application of OFIQ after
- * compilation (see @ref sec_compilation). A documentation for the arguments that
- * can be passed can be found @ref sec_sample_args "below".
- * 
- * @subsection sec_simple_sample Quality assessment for a single facial image
- * The sample application takes an images and outputs the computed 
- * quality assessments. For example, to output the quality 
- * assessments for one of the conformance test images using OFIQ's configuration (in
- * <code>./data</code>), run the following commands on Linux.
- * <pre>
- * $ cd <OFIQ-SOURCE>/install_x86_64_linux/Release/bin/
- * $ ./OFIQSampleApp -c ../../../data/ofiq_config.jaxn -i 
- *         ../../../data/tests/images/b-01-smile.png
- * </pre>
- * On Windows run the following commands.
- * <pre>
- * $ cd <OFIQ-SOURCE>\\install_x86_64\\Release\\bin
- * $ .\OFIQSampleApp -c ..\\..\\..\\data\\ofiq_config.jaxn -i 
- *         ..\\..\\..\\data\\tests\\images\\b-01-smile.png
- * </pre>
- * 
- * @subsection sec_batch_sample Quality assessment for multiple images
- * To reproduce the conformance test table given in Annex A of the ISO/IEC 29794-5
- * international standard for all conformance test images, run the following commands on Linux.
- * <pre>
- * $ cd <OFIQ-SOURCE>/install_x86_64_linux/Release/bin/
- * $ ./OFIQSampleApp -c ..\\..\\..\\data\\ofiq_config.jaxn -i 
- *         ..\\..\\..\\data\\tests\\images\\ -o table.csv
- * </pre>
- * The result will be written in the file 
- * <code><OFIQ-SOURCE>/install_x86_64_linux/Release/bin/table.csv</code>. 
- * <br/><br/>
- * On Windows run the following commands.
- * <pre>
- * $ cd <OFIQ-SOURCE>\\install_x86_64\\Release\\bin\\
- * $ .\\OFIQSampleApp -c ..\\..\\..\\data\\ -i 
- *          ..\\..\\..\\data\\tests\\images\\ -o table.csv
- * </pre> 
- * The result will be written in the file 
- * <code><OFIQ-SOURCE>\\install_x86_64\\Release\\bin\\table.csv</code>. 
- * 
- * @subsection sec_sample_args Arguments
- * The usage pattern of the sample application is the following.
- * <pre>
- *  OFIQSampleApp 
- *    -c <directory or file path> 
- *    [-cf <config file name>] 
- *    -i <directory or image file path> 
- *    [-o <csv file path>]
- * </pre>
- * The following table documents the usage of the sample application.
- * <table>
- *  <tr>
- *    <td><b>flag</b></td>
- *    <td><b>argument</b></td>
- *  </tr>
- *  <tr>
- *    <td>-c</td>
- *    <td>Path to a directory containing the file ofiq_config.jaxn or a path to a JAXN configuration file (see @ref sec_config).</td>
- *  </tr>
- *  <tr>
- *    <td>-cf</td>
- *    <td>Name of the JAXN configuration file contained in the directory specified by the flag -c. Must be omitted if -c specifies a path to a file.</td>
- *  </tr>
-  *  <tr>
- *    <td>-i</td>
- *    <td>Path to a directory containing facial images or a path to a facial image file. If a directory path is specified, all images in PNG and JPEG format will be processed.</td>
- *  </tr>
-  *  <tr>
- *    <td>-o</td>
- *    <td>Path to a CSV file to where the quality assessment is written. If -o is not specified, the output is written to the standard output.</td>
- *  </tr>
- * </table>
+ * @includedoc "../../BUILD.md"
  * 
  * @section sec_config Configuration
  * In this section, we describe the configuration file for OFIQ.
@@ -667,7 +466,7 @@
  *  <tr>
  *  <td>0x54</td>
  *  <td>Leftward crop of the face image</td>
- *  <td>"config">"params".<br/>"measures".<br/>"CropOfTheFaceImage".<br/>"LeftwardCropOfTheFaceImage"</td>
+ *  <td>"config">"params".<br/>"measures".<br/>"LeftwardCropOfTheFaceImage"</td>
  *  <td>"config".<br/>"measures".<br/>"CropOfTheFaceImage"</td>
  *  <td>none</td>
  *  <td>yes</td>
@@ -676,7 +475,7 @@
  *  <tr>
  *  <td>0x55</td>
  *  <td>Rightward crop of the face image</td>
- *  <td>"config">"params".<br/>"measures".<br/>"CropOfTheFaceImage".<br/>"RightwardCropOfTheFaceImage"</td>
+ *  <td>"config">"params".<br/>"measures".<br/>"RightwardCropOfTheFaceImage"</td>
  *  <td>"config".<br/>"measures".<br/>"CropOfTheFaceImage"</td>
  *  <td>none</td>
  *  <td>yes</td>
@@ -684,8 +483,8 @@
  *
  *  <tr>
  *  <td>0x56</td>
- *  <td>Upward crop of the face image</td>
- *  <td>"config">"params".<br/>"measures".<br/>"CropOfTheFaceImage".<br/>"UpwardCropOfTheFaceImage"</td>
+ *  <td>Margin above of the face image</td>
+ *  <td>"config">"params".<br/>"measures".<br/>"MarginAboveOfTheFaceImage"</td>
  *  <td>"config".<br/>"measures".<br/>"CropOfTheFaceImage"</td>
  *  <td>none</td>
  *  <td>yes</td>
@@ -693,8 +492,8 @@
  *
  *  <tr>
  *  <td>0x57</td>
- *  <td>Downward crop of the face image</td>
- *  <td>"config">"params".<br/>"measures".<br/>"CropOfTheFaceImage".<br/>"DownwardCropOfTheFaceImage"</td>
+ *  <td>Margin below of the face image</td>
+ *  <td>"config">"params".<br/>"measures".<br/>"MarginBelowOfTheFaceImage"</td>
  *  <td>"config".<br/>"measures".<br/>"CropOfTheFaceImage"</td>
  *  <td>none</td>
  *  <td>yes</td>
@@ -752,7 +551,12 @@
  *  <td>Abscence of head coverings</td>
  *  <td>"config">"params".<br/>"measures".<br/>"NoHeadCovering"</td>
  *  <td>"config".<br/>"measures".<br/>"NoHeadCovering"</td>
- *  <td><code>threshold</code> - threshold between 0 and 1-/td>
+ *  <td>
+ *   <code>T0</code> - Proportion of pixels classified as head covering <= T0 will lead to a quality component value of 100 (best)<br/>
+ *   <code>T1</code> - Proportion of pixels classified as head covering >= T1 will lead to a quality component value of 0 (worst)<br/>
+ *   <code>w</code> -Proportion of pixels classified as head covering in (T0,T1) will be interpolated using a sigmoid function with w as standard deviation<br/>
+ *   <code>x0</code> - Proportion of pixels classified as head covering in (T0,T1) will be interpolated using a sigmoid function with x0 as development point
+ *  </td>
  *  <td>no</td>
  *  </tr>
  * </table>
@@ -946,7 +750,7 @@
  * </ol>
  * 
  * @section sec_release_notes Release notes
- * This is OFIQ @ref sec_version_1_0_0_rc. 
+ * This is OFIQ @ref sec_version_1_0_0_rc2. 
  * The following table lists all measures and its implementation provided by this release of OFIQ. Details on the 
  * configuration and on requesting measures can be found
  * @ref sec_default_config "here". Note, the QAA identifiers listed in the table are defined in ISO/IEC 29794-5.
@@ -971,7 +775,7 @@
  * 
  *  <tr>
  *   <td>0x43</td>
- *   <td>Illumination unformity by summing up the minima of the histograms of the left and the right side of the face.</td>
+ *   <td>Illumination uniformity by summing up the minima of the histograms of the left and the right side of the face.</td>
  *   <td>\link OFIQ_LIB::modules::measures::IlluminationUniformity IlluminationUniformity\endlink</td>
  *  </tr>
  * 
@@ -1096,13 +900,13 @@
  * 
  *  <tr>
  *   <td>0x56</td>
- *   <td>Downward crop of the face image</td>
+ *   <td>Margin above of the face image</td>
  *   <td>\link OFIQ_LIB::modules::measures::CropOfTheFaceImage CropOfTheFaceImage\endlink</td>
  *  </tr>
  * 
  *  <tr>
  *   <td>0x57</td>
- *   <td>Upward crop of the face image</td>
+ *   <td>Margin below of the face image</td>
  *   <td>\link OFIQ_LIB::modules::measures::CropOfTheFaceImage CropOfTheFaceImage\endlink</td>
  *  </tr>
  *  
@@ -1141,7 +945,33 @@
  * </table>
  * 
  * @subsection sec_changelog Changelog
- * @subsubsection sec_version_1_0_0_rc Version 1.0.0-RC (2024-03-15)
- * Initial release of OFIQ's release candidate providing the measures described in the @ref sec_release_notes
+ * @subsubsection sec_version_1_0_0_rc2 Version 1.0.0-RC.2 (2024-07-31)
+ * Second release of OFIQ's release candidate. The following changes have been implemented.
+ * <ul>
+ *  <li>Supports compilation on MacOS</li>
+ *  <li>Successfully tested that it is possible (with some effort) to compile for and be conformant with mobile devices such as Android and iOS.</li>
+ *  <li>Revisions as per up coming FDIS (e.g., quality mappings, update of conformance test table, etc.)</li>
+ *  <li>Fix of the default config file: Changes to the CropOfTheFaceImage measures did not affect the quality mappings</li>
+ *  <li>Fixes link to the OFIQ-MODELS.zip archive: https://github.com/BSI-OFIQ/OFIQ-Project/issues/12</li>
+ *  <li>Removes libgtk dependency: https://github.com/BSI-OFIQ/OFIQ-Project/issues/18</li>
+ *  <li>Removes Lapack from ubuntu cmake file which wasn't used: https://github.com/BSI-OFIQ/OFIQ-Project/issues/20</li>
+ *  <li>Improves readability of source code by applying a style guide to member variables: https://github.com/BSI-OFIQ/OFIQ-Project/issues/27</li>
+ *  <li>Fixes from static code analyses, for example:
+ *   <ul>
+ *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/28</li>
+ *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/29</li>
+ *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/30</li>
+ *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/31</li>
+ *    <li>and others</li>
+ *   </ul>
+ *  </li>
+ *  <li>Removes mis-leading usage hint in the sample app: https://github.com/BSI-OFIQ/OFIQ-Project/issues/34</li>
+ *  <li>Avoids redundant RGB conversions: https://github.com/BSI-OFIQ/OFIQ-Project/issues/36</li>
+ *  <li>Fixes a bug on continuous OpenCV matrices: https://github.com/BSI-OFIQ/OFIQ-Project/issues/41</li>
+ *  <li>Fixes further issues and bugs and code beautification</li>
+ * </ul>
+ * 
+ * @subsubsection sec_version_1_0_0_rc1 Version 1.0.0-RC.1 (2024-03-15)
+ * Initial release of OFIQ's release candidate.
  */
 #pragma once

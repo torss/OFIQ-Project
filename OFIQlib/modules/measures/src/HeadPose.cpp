@@ -33,16 +33,17 @@ namespace OFIQ_LIB::modules::measures
 {
 
     HeadPose::HeadPose(
-        const Configuration& configuration, Session& session)
-        : Measure{configuration, session, OFIQ::QualityMeasure::HeadPose}
+        const Configuration& configuration)
+        : Measure{configuration, OFIQ::QualityMeasure::HeadPose}
     {
     }
 
     OFIQ::QualityMeasureResult CalculateQuality(const double& rawValue)
     {
         auto myCos = cos(rawValue * M_PI / 180);
-        myCos *= myCos;
-        auto scalarScore = std::max(0.0, round(100 * myCos));
+		myCos = std::max(0.0,myCos);
+		myCos *= myCos;
+        auto scalarScore = round(100 * myCos);
         return {rawValue, scalarScore, OFIQ::QualityMeasureReturnCode::Success};
     }
 
