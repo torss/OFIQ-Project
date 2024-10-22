@@ -22,7 +22,7 @@ As a result, OpenCV is now required as a dependency for applications that use th
 
 **License:** Like the majority of the OFIQ code, the new Python file ([python/ofiq_zmq.py](python/ofiq_zmq.py)) and C++ file ([OFIQlib/src/OFIQ_zmq_app.cpp](OFIQlib/src/OFIQ_zmq_app.cpp)) use the MIT License (see the file headers).
 
-**Miscellaneous:** Two [scripts/build.sh](scripts/build.sh) variants have been added ([build__no_iso_download.sh](scripts/build__no_iso_download.sh) & [build__only_build.sh](scripts/build__only_build.sh)), but these are unimportant helpers for C++ development purposes.
+**Miscellaneous:** One [scripts/build.sh](scripts/build.sh) variant has been added ([build__only_build.sh](scripts/build__only_build.sh)), but that's an unimportant helper for C++ development purposes.
 A [.gitignore](.gitignore) file has also been added.
 
 The remainder of this README is the original content (except with nested headers).
