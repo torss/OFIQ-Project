@@ -30,7 +30,6 @@
 #include "image_utils.h"
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
 
 namespace OFIQ_LIB::modules::measures
 {
@@ -107,6 +106,12 @@ namespace OFIQ_LIB::modules::measures
         cv::Mat reducedImage = ReduceImageToRegionOfInterest(maskedImage, leftRegionOfInterest, rightRegionOfInterest);
         double meanChannelA;
         double meanChannelB;
+        if (reducedImage.empty())
+        {
+            double D = 100.0;
+            SetQualityMeasure(session, qualityMeasure, D, OFIQ::QualityMeasureReturnCode::FailureToAssess);
+            return;
+        }
         ConvertBGRToCIELAB(reducedImage, meanChannelA, meanChannelB);
         double rawScore = CalculateScore(meanChannelA, meanChannelB);
         SetQualityMeasure(session, qualityMeasure, rawScore, OFIQ::QualityMeasureReturnCode::Success);

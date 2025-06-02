@@ -141,12 +141,9 @@ namespace OFIQ_LIB
         /**
          * @brief Create a Executor object
          * 
-         * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method
          * @return std::unique_ptr<OFIQ_LIB::modules::measures::Executor> 
          */
-        std::unique_ptr<OFIQ_LIB::modules::measures::Executor> CreateExecutor(Session& session);
+        std::unique_ptr<OFIQ_LIB::modules::measures::Executor> CreateExecutor();
         
         
         /**
@@ -171,7 +168,7 @@ namespace OFIQ_LIB
          * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
          * OFIQImpl::performPreprocessing()\endlink method
          */
-        void alignFaceImage(Session& session);
+        void alignFaceImage(Session& session) const;
 
         /**
          * @brief Run the computation of all measures set in the configuration.

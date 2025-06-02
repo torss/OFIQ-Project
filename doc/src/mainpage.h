@@ -749,8 +749,242 @@
  *  </li>
  * </ol>
  * 
+ * @section sec_tutorial_new_measure Tutorial: Extending OFIQ
+ * This section describes how to extend OFIQ by a new measure. We will choose 
+ * an easy measure to illustrate the process. Therefore, we extend OFIQ by 
+ * a somewhat dummy measure that assesses the subject's 
+ * <i>non-surprisedness</i>. We will measure the 
+ * surprisedness by the flatness of the eye-brow using the eye-brow landmarks.
+ * <br/><br/>
+ * Create a header file <code>NonSurprisedness.h</code> in the directory 
+ * <code>/path/to/OFIQ-Project/OFIQlib/modules/</code>
+ * <code>measures/</code> with the following content
+ * <pre>
+ * \#pragma once
+ * 
+ * \#include "landmarks.h"
+ * \#include "Measure.h"
+ *
+ * namespace OFIQ_LIB::modules::measures
+ * {
+ *     class NonSurprisedness : public Measure
+ *     {
+ *         public:
+ *           explicit NonSurprisedness(const Configuration& configuration);
+ *
+ *           void Execute(OFIQ_LIB::Session & session) override;
+ *   };
+ * }
+ * </pre>
+ * Also, create a source file <code>NonSurprisedness.cpp</code> in the directory
+ * <code>/path/to/OFIQ-Project/OFIQlib/modules/measures/src/</code> with the following content.
+ * <pre>
+ * \#include "NonSurprisedness.h"
+ * \#include "FaceMeasures.h"
+ * \#include "FaceParts.h"
+ *
+ * using FaceMeasures = OFIQ_LIB::modules::landmarks::FaceMeasures;
+ *
+ * namespace OFIQ_LIB::modules::measures
+ * {
+ *     static const auto qualityMeasure = OFIQ::QualityMeasure::NonSurprisedness;
+ *
+ *     NonSurprisedness::NonSurprisedness(const Configuration& configuration)
+ *         : Measure{ configuration, qualityMeasure }
+ *     {
+ *         // Implement me
+ *     }
+ *
+ *     void NonSurprisedness::Execute(OFIQ_LIB::Session & session)
+ *     {
+ *         // Implement me
+ *     }
+ * }
+ * </pre>
+ * To make the source code to compile, we need to extend the enumeration <code>OFIQ::QualiyMeasure</code>
+ * by the new measure. Therefore, edit the file <code>/path/to/OFIQ-Project/OFIQlib/include/ofiq_structs.h</code>
+ * and insert the item
+ * <pre>
+ *   NonSurprisedness
+ * </pre>
+ * within the enumeration <code>OFIQ::QualiyMeasure</code>. The resulting <code>ofiq_struct.h</code> could 
+ * look like this.
+ * <pre>
+ * ...
+ * namespace OFIQ
+ * {
+ *     ...
+ *     enum class QualityMeasure
+ *     {
+ *         // UnifiedQualityScore
+ *         UnifiedQualityScore = 0x41,
+ *         ...
+ *         // Newly inserted NonSurprisedness measure
+ *         NonSurprisedness,
+ *         // unknown measure
+ *         NotSet = -1
+ *     }
+ *     ...
+ * }
+ * </pre>
+ * Then add the new header to <code>/path/to/OFIQ-Project/OFIQlib/modules/measures/AllMeasures.h</code>
+ * <pre>
+ * ...
+ * \#include "UnifiedQualityScore.h"
+ * \#include "NonSurprisedness.h"
+ * </pre>
+ * and include the new measure in the file <code>/path/to/OFIQ-Project/OFIQlib/modules/measures/src/MeasureFactory.cpp</code>
+ * <pre>
+ * static const std::map<OFIQ\::QualityMeasure, 
+ *     std::function<std::unique_ptr<Measure>(const Configuration&)>> factoryMapping
+ * {
+ *     {OFIQ::QualityMeasure::SingleFacePresent, [](const Configuration& configuration) 
+ *         { return std::make_unique<SingleFacePresent>(configuration); }},
+ *     ...
+ *     {OFIQ::QualityMeasure::NonSurprisedness, [](const Configuration& configuration) 
+ *         { return std::make_unique<NonSurprisedness>(configuration); }},
+ * }
+ * </pre>
+ * If we are on Windows, we need to edit insert the new header 
+ * file <code>NonSurprisedness.h</code> and the new 
+ * source file <code>NonSurprisedness.cpp</code> in the 
+ * file <code>/path/to/OFIQ-Project/OFIQLib/CMakeLists.windows.cmake</code>.
+ * The resulting <code>CMakeLists.windows.cmake</code> could look like this.
+ * <pre>
+ *  list(APPEND module_sources 
+ *    ${libImplementationSources}
+ *    ...
+ *    ${OFIQLIB_SOURCE_DIR}/modules/measures/src/NonSurprisedness.cpp
+ *    ...
+ *
+ *  list(APPEND module_headers
+ *    ${PUBLIC_HEADER_LIST}
+ *    ...
+ *    ${OFIQLIB_SOURCE_DIR}/modules/measures/NonSurprisedness.h
+ *    ...
+ * </pre>
+ * Likewise, if we are on Ubuntu or MacOS, we need to edit the files
+ * <code>CMakeLists.ubuntu.cmake</code> or <code>CMakeLists.macos.cmake</code>, respectively.
+ * Note, for Ubuntu or MacOS we only need to insert the 
+ * file <code>NonSurprisedness.cpp</code> 
+ * (and not the file <code>NonSurprisedness.h</code>). 
+ * <br/><br/>
+ * After having finished the above steps, we may already build OFIQ 
+ * by performing the steps described in  the building steps. However, after
+ * compiling and running OFIQ, we may note that no output for our new
+ * no-surprisedness measure is made. Therefore, two additional steps 
+ * need to be done:
+ * <ol>
+ *  <li>Edit OFIQ's configuration file</li>
+ *  <li>Implement the member functions of the 
+ *   class <code>NonSurprisedness</code></li>
+ * </ol>
+ * To edit OFIQ's default configuration file, open <code>/path/to/OFIQ-Project/data/ofiq_config.jaxn</code>
+ * and include the NonSurprisedness measure. The 
+ * resulting <code>ofiq_config.jaxn</code> could look like this.
+ * <pre>
+ *  ...
+ *  "config": {
+ *   ...
+ *   "measures": [
+ *     ...
+ *     "NonSurprisedness",
+ *     ...
+ *   ],
+ *   ...
+ * </pre>
+ * To implement the <code>Execute</code> method, we may want to compute
+ * the native quality measure first. 
+ * At this point, we should define the non-surprisedness measure. For an eye-brow,
+ * we define the non-surprisedness using the difference of the y-coordinates
+ * of the northern eye-brow landmark to the y-coordinate between the left and the 
+ * right eye-brow coordinate. To make the non-surprisedness independent from
+ * the facial image's resolution we divide the difference by the width of the eye-brow.
+ * the right eye-brow landmarks divided by the distance between the left and right
+ * The non-surprisedness is computed for the left and right eye-brow
+ * and then the minimum of the two eye brow's non-surprisedness as the overall
+ * non-surprisedness. The following functions computes the non-surprisedness for
+ * an eye-brow.
+ * <pre>
+ * static double GetNonSurprisedness(
+ *     const OFIQ\::LandmarkPoint & north,
+ *     const OFIQ\::LandmarkPoint & left,
+ *     const OFIQ\::LandmarkPoint & right)
+ * {
+ *     auto middle = FaceMeasures::GetMiddle(OFIQ::Landmarks{ left,right });
+ *     double diff = std::abs(middle.y-north.y);
+ *     double width = FaceMeasures::GetDistance(left,right);
+ *     return diff / width; // Results in NaN, when dividing by zero
+ * }
+ * </pre>
+ * The function <code>NonSurprisedness</code> uses functions provided 
+ * by <code>FaceMeasures.h</code>.
+ * Now, we can implement the <code>Execute</code> method.
+ * <pre>
+ * void NonSurprisedness::Execute(OFIQ_LIB::Session & session)
+ * {
+ *     auto landmarks = session.getAlignedFaceLandmarks();
+ *     double leftNonSurprisedness = GetNonSurprisedness(landmarks.landmarks[33],
+ *         landmarks.landmarks[38],landmarks.landmarks[35]);
+ *     double rightNonSurprisedness = GetNonSurprisedness(landmarks.landmarks[50],
+ *         landmarks.landmarks[46],landmarks.landmarks[44]);
+ *     double nonSurprisedness = 
+ *         std::min(leftNonSurprisedness, rightNonSurprisedness);
+ *     if (std::isnan(nonSurprisedness))
+ *     {
+ *         // If the measure is NaN, we cannot compute
+ *         // the non-surprisedness and should indicate
+ *         // this by ’FailureToAssess’
+ *         SetQualityMeasure(session, qualityMeasure, nonSurprisedness, 
+ *             OFIQ\::QualityMeasureReturnCode::FailureToAssess);
+ *     }
+ *     else
+ *     {
+ *         SetQualityMeasure(session, qualityMeasure, nonSurprisedness,
+ *             OFIQ\::QualityMeasureReturnCode::Success);
+ *     }
+ * }
+ * </pre> 
+ * The measure will automatically map the non-surprisedness measure to 
+ * a quality values that is an integer between 0 and 100. For that, a
+ * default mapping is applied (see Section @ref sec_quality_config).
+ * We should change the default mapping in the constructor. Therefore,
+ * we choose a mapping with the help of a sigmoid function that maps
+ * high non-surprisedness values to high quality values and vice-versa.
+ * <pre>
+ * NonSurprisedness::NonSurprisedness(const Configuration& configuration)
+ *     : Measure{ configuration, qualityMeasure }
+ * {
+ *     SigmoidParameters defaultValues;
+ *     defaultValues.h = 100;
+ *     defaultValues.x0 = 0.5;
+ *     defaultValues.w = 1.0;
+ *     defaultValues.round = true;
+ *     AddSigmoid(qualityMeasure, defaultValues);
+ * }
+ * </pre>
+ * The above mapping is a fallback for the case when the mapping is not configured in the configuration file.
+ * To configure the mapping in the configuration file, edit the <code>ofiq_config.jaxn</code> so that
+ * it is of the form
+ * <pre>
+ *    "config": {
+ *      ...
+ *      "params" : {
+ *         ...
+ *         "measures": {
+ *            ...
+ *            "NonSurprisedness" : {
+ *              "Sigmoid" : { 
+ *                "h": 100,
+ *                "x0": 0.5,
+ *                "w": 1.0,
+ *                "round": true
+ *              }
+ *            }, ...
+ * </pre>
+ *
  * @section sec_release_notes Release notes
- * This is OFIQ @ref sec_version_1_0_0_rc2. 
+ * This is OFIQ v1.0.2. 
  * The following table lists all measures and its implementation provided by this release of OFIQ. Details on the 
  * configuration and on requesting measures can be found
  * @ref sec_default_config "here". Note, the QAA identifiers listed in the table are defined in ISO/IEC 29794-5.
@@ -943,35 +1177,8 @@
  *  </tr>
  * 
  * </table>
- * 
+ *
  * @subsection sec_changelog Changelog
- * @subsubsection sec_version_1_0_0_rc2 Version 1.0.0-RC.2 (2024-07-31)
- * Second release of OFIQ's release candidate. The following changes have been implemented.
- * <ul>
- *  <li>Supports compilation on MacOS</li>
- *  <li>Successfully tested that it is possible (with some effort) to compile for and be conformant with mobile devices such as Android and iOS.</li>
- *  <li>Revisions as per up coming FDIS (e.g., quality mappings, update of conformance test table, etc.)</li>
- *  <li>Fix of the default config file: Changes to the CropOfTheFaceImage measures did not affect the quality mappings</li>
- *  <li>Fixes link to the OFIQ-MODELS.zip archive: https://github.com/BSI-OFIQ/OFIQ-Project/issues/12</li>
- *  <li>Removes libgtk dependency: https://github.com/BSI-OFIQ/OFIQ-Project/issues/18</li>
- *  <li>Removes Lapack from ubuntu cmake file which wasn't used: https://github.com/BSI-OFIQ/OFIQ-Project/issues/20</li>
- *  <li>Improves readability of source code by applying a style guide to member variables: https://github.com/BSI-OFIQ/OFIQ-Project/issues/27</li>
- *  <li>Fixes from static code analyses, for example:
- *   <ul>
- *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/28</li>
- *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/29</li>
- *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/30</li>
- *    <li>https://github.com/BSI-OFIQ/OFIQ-Project/issues/31</li>
- *    <li>and others</li>
- *   </ul>
- *  </li>
- *  <li>Removes mis-leading usage hint in the sample app: https://github.com/BSI-OFIQ/OFIQ-Project/issues/34</li>
- *  <li>Avoids redundant RGB conversions: https://github.com/BSI-OFIQ/OFIQ-Project/issues/36</li>
- *  <li>Fixes a bug on continuous OpenCV matrices: https://github.com/BSI-OFIQ/OFIQ-Project/issues/41</li>
- *  <li>Fixes further issues and bugs and code beautification</li>
- * </ul>
- * 
- * @subsubsection sec_version_1_0_0_rc1 Version 1.0.0-RC.1 (2024-03-15)
- * Initial release of OFIQ's release candidate.
+ * @includedoc "../../CHANGELOG.md"
  */
 #pragma once

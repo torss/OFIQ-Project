@@ -53,8 +53,15 @@ namespace OFIQ_LIB::modules::measures
         auto headPose = session.getPose();
         auto interEyeDistance = landmarks::FaceMeasures::InterEyeDistance(alignedFaceLandmarks, headPose[1]);
 
+        if (std::isnan(interEyeDistance))
+        {
+            double rawScore = 1.0;
+            SetQualityMeasure(session, qualityMeasure, rawScore, OFIQ::QualityMeasureReturnCode::FailureToAssess);
+            return;
+        }
+
         // Determine EVZ according to ISO/IEC 39794-5
-        int V = static_cast<int>(std::floor(interEyeDistance / 20.0));
+        auto V = static_cast<int>(std::floor(interEyeDistance / 20.0));
         std::vector<cv::Point2i> leftEyePoints;
         for (auto landmark : leftEye)
         {
