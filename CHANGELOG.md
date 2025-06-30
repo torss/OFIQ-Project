@@ -1,4 +1,4 @@
-### Version 1.0.3 (2025-05-10)
+### Version 1.0.3 (2025-06-30)
 <ul>
  <li>Allows requesting pre-processing results (such as landmarks) using the OFIQ_LIB::OFIQImpl::vectorQualityAndPreprocessing function</li>
  <li>Contains https://github.com/BSI-OFIQ/OFIQ-Project/pull/71</li>
