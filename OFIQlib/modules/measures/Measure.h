@@ -311,7 +311,7 @@ namespace OFIQ_LIB::modules::measures
 
         /**
          * @brief Value encoding the measure type.
-         * @details The value is set to \link OFIQ::QualityMeasure::End QualityMeasure::NotSet\endlink
+         * @details The value is set to \link OFIQ::QualityMeasure::NotSet QualityMeasure::NotSet\endlink
          * by default which effectively corresponds to a non-specified measure.
          */
         OFIQ::QualityMeasure m_measure = OFIQ::QualityMeasure::NotSet;

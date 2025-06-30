@@ -5,6 +5,8 @@ use_conan=ON
 download=ON
 config=Release
 os=linux
+useSonarWrapper=false
+sonarWrapper="${SONARQUBE_WRAPPER_PATH:-.sonar}/build-wrapper-linux-x86-64"
 
 while [ -n "$1" ]
 do  
@@ -14,6 +16,9 @@ elif [ "$1" = "--no-download" ]; then
     download=OFF
 elif [ "$1" = "--debug" ]; then
     config=Debug
+elif [ "$1" = "--use-sonar-wrapper" ]; then
+    useSonarWrapper=true
+    echo "The following sonar wrapper will be used: $sonarWrapper"
 elif [ "$1" = "--os" ]; then
     shift
     if [ "$1" = "macos" ]; then
@@ -91,6 +96,13 @@ rm -r $build_dir
 echo "Generating build files"
 cmake -S ./ -B $build_dir -DCMAKE_INSTALL_PREFIX=$install_dir -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
     -DDOWNLOAD_ONNX=$use_conan -DUSE_CONAN=$use_conan -DOS=$os -DCMAKE_BUILD_TYPE=$config -DDOWNLOAD_MODELS_AND_IMAGES=$download
-cmake --build $build_dir --target install -j 8
+
+cmakeBuildCommand="cmake --build $build_dir --target install -j 8"
+if [ "$useSonarWrapper" = "true" ]
+then
+    $sonarWrapper --out-dir bw-output $cmakeBuildCommand
+else
+    $cmakeBuildCommand
+fi
 
 echo "Building finished"

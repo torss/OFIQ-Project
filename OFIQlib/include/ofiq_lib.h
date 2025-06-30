@@ -48,27 +48,46 @@
  */
 namespace OFIQ
 {
+    /**
+     * @brief Objects of this enum class can be used
+     * to request pre-processing resulty explicitly.
+     * @see \link OFIQ_LIB::OFIQImpl::vectorQualityWithPreprocessingResults OFIQImpl::vectorQualityWithPreprocessingResults\endlink
+     */
     enum class PreprocessingResultType
     {
-        // Flag to request no preprocessing data
+        /**
+         * Flag to request no preprocessing data
+         */
         None = 0x0,
 
-        // Flag to request detected faces
+        /**
+         * Flag to request detected faces
+         */
         Faces = 0x1,
 
-        // Flag to request landmarks
+        /**
+        * Flag to request landmarks
+         */
         Landmarks = 0x2,
 
-        // Flag to request face parsing segmentation
+        /**
+         * Flag to request face parsing segmentation
+         */
         Segmentation = 0x4,
 
-        // Flag to request face occlusion mask
+        /**
+         * Flag to request face occlusion mask
+         */
         OcclusionMask = 0x8,
 
-        // Flag to request landmarked region
+        /**
+         * Flag to request landmarked region
+         */
         LandmarkedRegion = 0x10,
 
-        // Mask to request all available pre-processing data
+        /**
+         * Mask to request all available pre-processing data
+         */
         All = 0x1 + 0x2 + 0x4 + 0x8 + 0x10
     };
 

@@ -1,5 +1,5 @@
 set(FILE OFIQ-EXTERN.zip)
-set(URL https://standards.iso.org/iso-iec/29794/-5/ed-1/en/OFIQ-EXTERN.zip)
+set(URL https://filex.secunet.com/?t=df5556766cc2418512b91ff7c7d58455)
 
 message("Downloading external source code from ${URL}")
 file(DOWNLOAD ${URL} ${FILE} SHOW_PROGRESS)

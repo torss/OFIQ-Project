@@ -207,7 +207,7 @@ namespace OFIQ_LIB::modules::landmarks
                     landmarks.cbegin(),
                     landmarks.cend(),
                     landmarks.begin(),
-                    [](float i_landmark) { return (i_landmark + 1.) / 2 * 255; });
+                    [](float i_landmark) { return (i_landmark + 1.0f) / 2 * 255; });
 
                 return landmarks;
             }
