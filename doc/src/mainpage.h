@@ -716,13 +716,13 @@
  * one can run
  * <pre>
  * FaceImageQualityAssessment assessment;
- * FaceImageQualityPreprocessingResult preprocessing;
+ * FaceImageQualityPreprocessingResult preprocessingResult;
  * ReturnStatus retStatus = implPtr->vectorQualityWithPreprocessingResults
- *         (image, assessment, preprocessing);
+ *         (image, assessment, preprocessingResult);
  * </pre>
  * If successful (i.e., if <code>retStatus</code> is of 
  * value \link OFIQ::ReturnCode::Success ReturnCode::Success\endlink), 
- * the object <code>preprocessing</code> contains pre-processing results - 
+ * the object <code>preprocessingResult</code> contains pre-processing results - 
  * in addition to the quality assessment result stored in <code>assement</code>. More details can be found 
  * in the documentation of 
  * the \link OFIQ::FaceImageQualityPreprocessingResult FaceImageQualityPreprocessingResult\endlink struct.
@@ -747,7 +747,7 @@
  * implementation is as follows.
  * <ol>
  *  <li>
- *   Pre-processing of the input image using the \link OFIQ_LIB::OFIQImpl::performPreprocessing() OFIQImpl::performPreprocessing()\endlink function.
+ *   Pre-processing of the input image using the \link OFIQ_LIB::OFIQImpl::preprocess OFIQImpl::preprocess()\endlink function.
  *   <ol>
  *    <li>Face detection implemented by \link OFIQ_LIB::modules::detectors::SSDFaceDetector::UpdateFaces() SSDFaceDetector::UpdateFaces()\endlink</li>.
  *    <li>Pose estimation implemented by \link OFIQ_LIB::modules::poseEstimators::HeadPose3DDFAV2::updatePose() HeadPose3DDFAV2::updatePose()\endlink</li>.
@@ -1001,6 +1001,18 @@
  *            }, ...
  * </pre>
  *
+ * @section sec_image_formats Supported image file formats
+ * Using the function \link OFIQ_LIB::readImage OFIQ_LIB::readImage()\endlink image
+ * files can be read. The same file formats are supported as those supported by the
+ * linked OpenCV compilation. Per default, when building OFIQ with Conan,
+ * OpenCV is built with the support of the following formats: BMP, PNG, JPG, JPEG2000, HDR, PBM, PGM, PNM, PPM.
+ * Per default, the following formats are not supported: TIF, RAS, RS, WEBP.
+ *
+ * @section sec_exif EXIF flags
+ * Using the function \link OFIQ_LIB::readImage OFIQ_LIB::readImage()\endlink image
+ * files can be read. Some formats, like JPEG, contain EXIF information. These are
+ * supported in the same way as they are supported by the linked OpenCV compilation.
+ *
  * @section sec_release_notes Release notes
  * This is OFIQ v1.0.3. 
  * The following table lists all measures and its implementation provided by this release of OFIQ. Details on the 
@@ -1196,7 +1208,10 @@
  * 
  * </table>
  *
- * @subsection sec_changelog Changelog
+ *
  * @includedoc "../../CHANGELOG.md"
+ *
+ *
+ * @includedoc "../../ISSUES.md"
  */
 #pragma once

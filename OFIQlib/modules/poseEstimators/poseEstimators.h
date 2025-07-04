@@ -58,8 +58,8 @@ namespace OFIQ_LIB
          * @brief This function estimates the three head orientation angles.
          *
          * @param session Session object containing the original facial image and pre-processing results 
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing() 
-         * OFIQImpl::performPreprocessing()\endlink method 
+         * computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method 
          */
         EulerAngle& estimatePose(OFIQ_LIB::Session& session);
 

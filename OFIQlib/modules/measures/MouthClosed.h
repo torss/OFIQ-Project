@@ -52,8 +52,8 @@ namespace OFIQ_LIB::modules::measures
          * @brief Assesses mouth closeness.
          * @details Mouth closed assessment based on computing a ratio
          * from mouth landmarks. 
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          * @see \link OFIQ_LIB::Session::getAlignedFaceLandmarks() Session::getAlignedFaceLandmarks()\endlink
          */
         void Execute(OFIQ_LIB::Session& session) override;

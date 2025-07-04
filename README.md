@@ -17,3 +17,6 @@ A full documentation of __OFIQ__ including compilation, configuration and a comp
 the C/C++ API is contained in the reference manual:
 see [doc/refman.pdf](doc/refman.pdf).
 
+## Known issues
+For a list of known issues, see [here](ISSUES.md)
+

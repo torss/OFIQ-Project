@@ -109,8 +109,8 @@ namespace OFIQ_LIB::modules::segmentations
          * is returned as face parsing.
          *
          * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          *
          * @param faceSegment Enum value encoding the requested face segment. If the value is
          * \link OFIQ_LIB::modules::segmentations::SegmentClassLabels::face SegmentClassLabels::face\endlink

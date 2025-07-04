@@ -292,43 +292,117 @@ string exportAssessmentResultsToString(
 void usage(const string& executable)
 {
     cerr << "Usage: " << executable
-         << " -c configDir "
-            "-o outputFile -h outputStem -i inputFile -cf configFile"
+         << " [-c <configDir|configPath>]" << endl
+         << " [-o <outputFile>]" << endl
+         << " - i <inputFile>|<inputDir>" << endl
+         << " [-cf <configFile>]"
          << endl;
 }
 
 int main(int argc, char* argv[])
 {
-    int requiredArgs = 1; /* exec name */
-    if (argc < requiredArgs)
+    if (argc < 2) // If only the exec is specified
     {
         usage(argv[0]);
-        exit(EXIT_FAILURE);
+        return FAILURE;
     }
 
-    fs::path configDir("config");
-    const char* outputFile = nullptr;
+    fs::path configDir;
+    fs::path outputFile;
     fs::path inputFile;
     fs::path configFile;
 
-    int i = 0;
-    while (i < argc - requiredArgs)
+    for (int i = 1; i < argc; i++)
     {
-        if (strcmp(argv[requiredArgs + i], "-c") == 0)
-            configDir = fs::path(argv[requiredArgs + (++i)]);
-        else if (strcmp(argv[requiredArgs + i], "-o") == 0)
-            outputFile = argv[requiredArgs + (++i)];
-        else if (strcmp(argv[requiredArgs + i], "-i") == 0)
-            inputFile = fs::path(argv[requiredArgs + (++i)]);
-        else if (strcmp(argv[requiredArgs + i], "-cf") == 0)
-            configFile = fs::path(argv[requiredArgs + (++i)]);
+        if (strcmp(argv[i], "-c") == 0)
+        {
+            if ( !configDir.empty() ) 
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] <configDir|configPath> already specified." << endl; 
+                return FAILURE;
+            }
+            if (i + 1 >= argc) 
+            { 
+                usage(argv[0]); 
+                cerr << "[ERROR] specification of <configDir|configPath> missing." << endl; 
+                return FAILURE;
+            }
+            configDir = fs::path(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-o") == 0)
+        {
+            if (!outputFile.empty())
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] <outputFile> already specified." << endl; 
+                return FAILURE;
+            }
+            if (i + 1 >= argc)
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] specification of <outputFile> missing." << endl; 
+                return FAILURE;
+            }
+            outputFile = fs::path(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-i") == 0)
+        {
+            if (!inputFile.empty())
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] <inputFile>|<inputDir> already specified." << endl; 
+                return FAILURE;
+            }
+            if (i + 1 >= argc)
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] specification of <inputFile>|<inputDir> missing." << endl; 
+                return FAILURE;
+            }
+            inputFile = fs::path(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-cf") == 0)
+        {
+            if (!configFile.empty())
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] <configFile> already specified." << endl;
+                return FAILURE;
+            }
+            if (i + 1 >= argc)
+            {
+                usage(argv[0]); 
+                cerr << "[ERROR] specification of <configFile> missing." << endl; 
+                return FAILURE;
+            }
+            configFile = fs::path(argv[++i]);
+        }
         else
         {
-            cerr << "[ERROR] Unrecognized flag: " << argv[requiredArgs + i] << endl;
             usage(argv[0]);
+            cerr << "[ERROR] Unrecognized flag: " << argv[i] << endl;
             return FAILURE;
         }
-        ++i;
+    }
+
+    // Check completeness of arguments
+    if (inputFile.empty())
+    {
+        usage(argv[0]);
+        cerr << "[ERROR] <inputFile>|<inputDir> must be specified." << endl;
+        return FAILURE;
+    }
+
+    if (!fs::is_regular_file(inputFile) && !fs::is_directory(inputFile))
+    {
+        cerr << "[ERROR] -i must specify an existing file or a directory." << endl;
+        return FAILURE;
+    }
+
+    if (configDir.empty())
+    {
+        configDir = fs::path("config");
     }
 
     if (fs::is_regular_file(configDir))
@@ -339,8 +413,8 @@ int main(int argc, char* argv[])
             return FAILURE;
         }
 
-        configFile = fs::path(configDir).filename();
-        configDir = fs::path(configDir).parent_path();
+        configFile = configDir.filename();
+        configDir = configDir.parent_path();
     }
 
     /* Get implementation pointer */
@@ -351,7 +425,6 @@ int main(int argc, char* argv[])
         configDir.generic_string(),
         configFile.generic_string());
     auto end_time = std::chrono::high_resolution_clock::now();
-
     if (ret.code != ReturnCode::Success)
     {
         cerr << "[ERROR] initialize() returned error: " << ret.code << "." << endl
@@ -370,7 +443,7 @@ int main(int argc, char* argv[])
     cout << "OFIQ library version: " << major << '.' << minor << '.' << patch << endl;
 
     // write to output file
-    if (outputFile != nullptr)
+    if (!outputFile.empty())
     {
         std::ofstream ofs(outputFile);
         if (ofs.good())
@@ -379,9 +452,9 @@ int main(int argc, char* argv[])
         }
         else
         {
-        cerr << "[ERROR] Could not open '" << outputFile << "'." << endl
-             << ret.info << endl;
-        return FAILURE;
+            cerr << "[ERROR] Could not open '" << outputFile.filename() << "'." << endl
+                 << ret.info << endl;
+            return FAILURE;
         }
     }
     else

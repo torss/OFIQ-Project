@@ -52,8 +52,8 @@ namespace OFIQ_LIB::modules::measures
          * @brief Assesses luminance mean and luminance variance measures.
          * @details On execution, two measures will be assessed: Luminance mean
          * and luminance variance.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
     };

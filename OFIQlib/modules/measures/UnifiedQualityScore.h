@@ -58,8 +58,8 @@ namespace OFIQ_LIB::modules::measures
          * trained on MS1MV2 with MagFace loss without DDP parallelisation. 
          * The algorithm takes as input the image I output by the alignment algorithm. 
          * 
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing() 
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess 
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
 
