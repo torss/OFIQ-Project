@@ -71,8 +71,8 @@ if %use_conan%==ON (
   echo Building dependencies from source for %config% mode
   @REM build opencv
   cd ../extern/opencv-4.5.5 || goto end
-  cmake -S ./ -G %generator% %set_architecture% -B build -DBUILD_LIST=core,calib3d,imgcodecs,highgui,improc,dnn,ml -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DWITH_FFMPEG=OFF ^
-  -DWITH_TIFF=OFF -DWITH_WEBP=OFF -DWITH_IPP=OFF -DWITH_GTK=OFF -DWITH_QT=OFF -DCMAKE_INSTALL_PREFIX=./build/install -DBUILD_SHARED_LIBS=OFF -DBUILD_WITH_STATIC_CRT=OFF || goto end
+  cmake -S ./ -G %generator% %set_architecture% -B build -DBUILD_LIST=core,calib3d,imgcodecs,improc,dnn,ml -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DWITH_FFMPEG=OFF ^
+  -DWITH_TIFF=OFF -DWITH_WEBP=OFF -DWITH_IPP=OFF -DWITH_GTK=OFF -DWITH_QT=OFF -DCMAKE_INSTALL_PREFIX=./build/install -DBUILD_SHARED_LIBS=OFF || goto end
   cmake --build build --config %config% --target install -j 8 || goto end
   @REM build gtest
   cd ../googletest || goto end

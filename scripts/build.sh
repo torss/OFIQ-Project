@@ -74,8 +74,16 @@ else
     fi
     # build opencv
     cd ../extern/opencv-4.5.5
-    cmake -S ./ -B build -DBUILD_LIST=core,calib3d,imgcodecs,highgui,improc,dnn,ml \
-    -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DWITH_FFMPEG=OFF -DWITH_TIFF=OFF -DWITH_WEBP=OFF -DWITH_IPP=OFF -DCMAKE_INSTALL_PREFIX=./build/install || exit 1
+    cmake -S ./ -B build -DBUILD_LIST=core,calib3d,imgcodecs,improc,dnn,ml \
+    -DBUILD_opencv_apps=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DWITH_FFMPEG=OFF -DWITH_TIFF=OFF -DWITH_WEBP=OFF -DWITH_IPP=OFF \
+    -DWITH_OPENCL=OFF -DWITH_LAPACK=OFF -DWITH_QUIRC=OFF \
+    -DBUILD_ZLIB=ON -DWITH_ZLIB=ON \
+    -DBUILD_PNG=ON -DWITH_PNG=ON \
+    -DBUILD_JPEG=ON -DWITH_JPEG=ON \
+    -DBUILD_OPENEXR=OFF -DWITH_OPENEXR=OFF \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DWITH_ADE=OFF \
+    -DCMAKE_INSTALL_PREFIX=./build/install || exit 1
     cmake --build build --config $config --target install -j 8 || exit 1
     # build gtest
     cd ../googletest

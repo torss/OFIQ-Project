@@ -26,7 +26,7 @@ else(USE_CONAN)
                 install(FILES "${IMPORTED_LIB_LOCATION}" DESTINATION ${CMAKE_BINARY_DIR}/Testing/${CMAKE_BUILD_TYPE}/)
                 get_property(IMPORTED_LIB_LOCATION TARGET GTest::gtest_main PROPERTY IMPORTED_LOCATION)
                 install(FILES "${IMPORTED_LIB_LOCATION}" DESTINATION ${CMAKE_BINARY_DIR}/Testing/${CMAKE_BUILD_TYPE}/)
-        elseif(${OS} STREQUAL "linux")
+        elseif(${OS} STREQUAL "linux" OR ${OS} STREQUAL "linux-arm64")
                 add_library(GTest::gtest SHARED IMPORTED)
                 set_target_properties(GTest::gtest PROPERTIES
                 IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/extern/googletest/build/lib/libgtest.so
