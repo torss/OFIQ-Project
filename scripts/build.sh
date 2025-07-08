@@ -82,7 +82,7 @@ else
     -DBUILD_JPEG=ON -DWITH_JPEG=ON \
     -DBUILD_OPENEXR=OFF -DWITH_OPENEXR=OFF \
     -DBUILD_SHARED_LIBS=OFF \
-    -DWITH_ADE=OFF \
+    -DWITH_ADE=OFF -DWITH_CAROTENE=OFF \
     -DCMAKE_INSTALL_PREFIX=./build/install || exit 1
     cmake --build build --config $config --target install -j 8 || exit 1
     # build gtest

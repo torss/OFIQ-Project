@@ -24,7 +24,7 @@ include_directories (
 
 if(USE_CONAN)
 	# Add packages from conan
-	find_package(OpenCV REQUIRED COMPONENTS core calib3d imgcodecs imgproc highgui dnn ml)
+	find_package(OpenCV REQUIRED COMPONENTS core calib3d imgcodecs imgproc dnn ml)
 	find_package(taocpp-json REQUIRED)
 	find_package(magic_enum REQUIRED)
 
@@ -52,10 +52,6 @@ else(USE_CONAN)
     IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime/build/MacOS/${CMAKE_BUILD_TYPE}/libonnxruntime.dylib
     IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime/build/MacOS/${CMAKE_BUILD_TYPE}/libonnxruntime.1.18.0.dylib
 	INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime/include/onnxruntime/core/session
-	)
-	add_library(IlmImf STATIC IMPORTED)
-	set_target_properties(IlmImf PROPERTIES
-		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/lib/opencv4/3rdparty/libIlmImf.a
 	)
 	add_library(ittnotify STATIC IMPORTED)
 	set_target_properties(ittnotify PROPERTIES
@@ -105,11 +101,6 @@ else(USE_CONAN)
 		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/lib/libopencv_imgproc.a
 		INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/include/opencv4
 	)
-	add_library(OpenCV::highgui STATIC IMPORTED)
-	set_target_properties(OpenCV::highgui PROPERTIES
-		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/lib/libopencv_highgui.a
-		INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/include/opencv4
-	)
 	add_library(OpenCV::dnn STATIC IMPORTED)
 	set_target_properties(OpenCV::dnn PROPERTIES
 		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/lib/libopencv_dnn.a
@@ -132,8 +123,8 @@ else(USE_CONAN)
 	)
 
 	add_library(OpenCV INTERFACE)
-	target_link_libraries(OpenCV INTERFACE OpenCV::calib3d OpenCV::imgcodecs OpenCV::highgui
-		OpenCV::dnn OpenCV::ml OpenCV::features2d OpenCV::flann OpenCV::imgproc OpenCV::core IlmImf ittnotify libjpeg-turbo 
+	target_link_libraries(OpenCV INTERFACE OpenCV::calib3d OpenCV::imgcodecs 
+		OpenCV::dnn OpenCV::ml OpenCV::features2d OpenCV::flann OpenCV::imgproc OpenCV::core ittnotify libjpeg-turbo 
 		libopenjp2 libpng libprotobuf tegra_hal zlib
 	)
 endif(USE_CONAN)
