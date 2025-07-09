@@ -101,8 +101,10 @@ fi
 echo "Attempting to build the real implementation"
 
 cd ../
-echo "Removing $build_dir"
-rm -r $build_dir
+if [ -d "$build_dir" ]; then
+    echo "Removing $build_dir"
+    rm -r $build_dir
+fi
 
 echo "Generating build files"
 cmake -S ./ -B $build_dir -DCMAKE_INSTALL_PREFIX=$install_dir -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
