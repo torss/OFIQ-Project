@@ -1,0 +1,49 @@
+name: macOS Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    strategy:
+      matrix:
+        configuration: [Release, Debug]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Setup Python and Conan
+      run: |
+        # Create a virtual environment
+        python3 -m venv venv
+        source venv/bin/activate
+        # Upgrade pip and install conan
+        python -m pip install --upgrade pip
+        python -m pip install conan==2.18.1
+        # Add venv bin to PATH to ensure conan is available in subsequent steps
+        echo "$PWD/venv/bin" >> $GITHUB_PATH
+
+    - name: Build OFIQ
+      run: |
+        cd scripts
+        sh build.sh --os macos ${{ matrix.configuration == 'Debug' && '--debug' || '' }}
+
+    - name: Run Conformance Tests
+      run: |
+        cd scripts
+        sh conformance_tests.sh --os macos ${{ matrix.configuration == 'Debug' && '--debug' || '' }}
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ofiq-macos-${{ matrix.configuration }}
+        path: ./*

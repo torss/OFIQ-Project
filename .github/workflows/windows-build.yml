@@ -1,0 +1,56 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        architecture: [x64, x86]
+        configuration: [Release, Debug]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Setup Visual Studio Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ matrix.architecture }}
+
+    - name: Install Conan
+      run: |
+        python -m pip install --upgrade pip
+        pip install conan==2.18.1
+
+    - name: Build OFIQ
+      run: |
+        cd scripts
+        .\build.cmd --arch ${{ matrix.architecture }} --compiler 17 ${{ matrix.configuration == 'Debug' && '--debug' || '' }}
+      shell: cmd
+
+    - name: Run Conformance Tests
+      run: |
+        cd scripts
+        .\conformance_tests.cmd ${{ matrix.configuration == 'Debug' && '--debug' || '' }}
+      shell: cmd
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ofiq-windows-${{ matrix.architecture }}-${{ matrix.configuration }}
+        path: ./*

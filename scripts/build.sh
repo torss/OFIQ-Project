@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e  # Exit immediately if a command exits with a non-zero status
+
 build_dir=build/build_linux
 install_dir=install_x86_64_linux
 use_conan=ON

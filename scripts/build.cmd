@@ -56,21 +56,21 @@ if %use_conan%==ON (
     --profile:build ../conan/conan_profile_release.txt ^
     --profile:host ../conan/conan_profile_release.txt ^
       %compiler% %conan_set_arch% ^
-    --output-folder=../build/conan || goto end
+    --output-folder=../build/conan || goto :end
   ) else (
     conan install ../conan/conanfile.txt --build missing ^
     --profile:build ../conan/conan_profile_debug.txt ^
     --profile:host ../conan/conan_profile_debug.txt ^
       %compiler% %conan_set_arch% ^
-    --output-folder=../build/conan || goto end
+    --output-folder=../build/conan || goto :end
   )
 ) else (
   if %download%==ON (
-    cmake -P ../cmake/DownloadExternalSourceCode.cmake
+    cmake -P ../cmake/DownloadExternalSourceCode.cmake || goto :end
   )
   echo Building dependencies from source for %config% mode
   @REM build opencv
-  cd ../extern/opencv-4.5.5 || goto end
+  cd ../extern/opencv-4.5.5 || goto :end
   cmake -S ./ -G %generator% %set_architecture% -B build ^
   -DBUILD_LIST=core,calib3d,imgcodecs,improc,dnn,ml ^
   -DBUILD_opencv_apps=OFF ^
@@ -82,15 +82,15 @@ if %use_conan%==ON (
   -DBUILD_JPEG=ON -DWITH_JPEG=ON ^
   -DBUILD_OPENEXR=OFF -DWITH_OPENEXR=OFF ^
   -DBUILD_SHARED_LIBS=OFF -DBUILD_WITH_STATIC_CRT=OFF ^
-  -DWITH_ADE=OFF -DCMAKE_INSTALL_PREFIX=./build/install || goto end
-  cmake --build build --config %config% --target install -j 8 || goto end
+  -DWITH_ADE=OFF -DCMAKE_INSTALL_PREFIX=./build/install || goto :end
+  cmake --build build --config %config% --target install -j 8 || goto :end
   @REM build gtest
-  cd ../googletest || goto end
-  cmake -S ./ -G %generator% %set_architecture% -B build -DBUILD_GMOCK=OFF -DINSTALL_GTEST=OFF -DBUILD_SHARED_LIBS=ON || goto end
-  cmake --build build/googletest --config %config% || goto end
+  cd ../googletest || goto :end
+  cmake -S ./ -G %generator% %set_architecture% -B build -DBUILD_GMOCK=OFF -DINSTALL_GTEST=OFF -DBUILD_SHARED_LIBS=ON || goto :end
+  cmake --build build/googletest --config %config% || goto :end
   @REM build onnxruntime
-  cd ../onnxruntime || goto end
-  call build.bat --config %config% --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --cmake_generator "Visual Studio 17 2022" --update --build %onnxruntime_flags% || goto end
+  cd ../onnxruntime || goto :end
+  call build.bat --config %config% --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --cmake_generator "Visual Studio 17 2022" --update --build %onnxruntime_flags% || goto :end
   cd ..
 )
 pushd %cd%
@@ -105,10 +105,10 @@ if exist %build_dir% (
 
 echo Generating build files
 cmake -S ./ -G %generator% %set_architecture% -B %build_dir% -DCMAKE_INSTALL_PREFIX=%install_dir% -DDOWNLOAD_ONNX=%use_conan% -DUSE_CONAN=%use_conan% ^
-  -DOS=windows -DCMAKE_BUILD_TYPE=%config% -DARCHITECTURE=%architecture% -DDOWNLOAD_MODELS_AND_IMAGES=%download% -DVS_VERSION=%vs_version% || goto end
+  -DOS=windows -DCMAKE_BUILD_TYPE=%config% -DARCHITECTURE=%architecture% -DDOWNLOAD_MODELS_AND_IMAGES=%download% -DVS_VERSION=%vs_version% || goto :end
 
 echo Building %config%
-cmake --build %build_dir% --config %config% --target install -j 8 || goto end
+cmake --build %build_dir% --config %config% --target install -j 8 || goto :end
 
 echo Building finished
 
