@@ -97,7 +97,7 @@ namespace OFIQ_LIB
          * Mask encoding the pre-processing data being requested.
          * @return OFIQ::ReturnStatus
          * 
-         * @see \link OFIQ::PreprocessingRequest PreprocessingRequest\endlink
+         * @see \link OFIQ::PreprocessingResultType PreprocessingResultType\endlink
          */
         OFIQ::ReturnStatus vectorQualityWithPreprocessingResults(
             const OFIQ::Image& image,
@@ -159,19 +159,18 @@ namespace OFIQ_LIB
          * @brief Perform the face alignment.
          * 
          * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method
+         * computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method
          */
         void alignFaceImage(Session& session) const;
 
         /**
          * @brief Processes and image and outputs its quality assessment; optionally, 
          * if requested, pre-processing data can be output by the function.
-         * @param[in] image Face image
-         * @param[out] assessments Structure in which the assessment is stored
+         * @param[in] session Session object containing the original facial image
          * @param[out] preprocessingResult Structure in which requested pre-processing data is stored
          * @param[in] resultRequestsMask Mask encoding the requested pre-processing results
-         * @see \link OFIQ::PreprocessingRequest PreprocessingRequest\endlink
+         * @see \link OFIQ::FaceImageQualityPreprocessingResult FaceImageQualityPreprocessingResult\endlink
          */
         OFIQ::ReturnStatus getPreprocessingResults(
             const Session& session,

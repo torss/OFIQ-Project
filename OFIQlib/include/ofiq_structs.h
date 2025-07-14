@@ -505,7 +505,7 @@ namespace OFIQ
      * @brief Data structure storing the results of pre-processing computations.
      * 
      * @details The members can be requested using the
-     * \link OFIQ_LIB::OFIQImpl::vectorQualityAndPreprocessing OFIQImpl::vectorQualityAndPreprocessing\endlink 
+     * \link OFIQ_LIB::OFIQImpl::vectorQualityWithPreprocessingResults OFIQImpl::vectorQualityWithPreprocessingResults\endlink 
      * function. Non-requested members are empty by default.
      */
     struct FaceImageQualityPreprocessingResult

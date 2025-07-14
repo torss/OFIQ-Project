@@ -1,8 +1,12 @@
 # Changes
 
-## Version 1.0.3 (2025-06-25)
+## Version 1.0.3 (2025-07-04)
 
 - Added a new interface method ```vectorQualityWithPreprocessingResults``` that works exactly as the existing ```vectorQuality``` method, but additionally returns image preprocessing results. The preprocessing result types are defined in the  struct ```PreprocessingResultType``` and include detected faces, face landmark points, face parsing segmentation mask, face occlusion mask and landmarked region mask.
+- Includes a list of known issues
+- Accepts https://github.com/BSI-OFIQ/OFIQ-Project/pull/71: Removes unneeded includes to opencv/highgui.cpp
+- Accepts https://github.com/BSI-OFIQ/OFIQ-Project/pull/69: Fixes type of Image.data
+- Fixes https://github.com/BSI-OFIQ/OFIQ-Project/issues/65: OFIQSampleApp crashed when specified with inconsistent arguments
 
 ## Version 1.0.2 (2025-04-10)
 
@@ -52,3 +56,4 @@ Second release of OFIQ's release candidate. The following changes have been impl
 ## Version 1.0.0-RC.1 (2024-03-15)
 
 Initial release of OFIQ's release candidate.
+

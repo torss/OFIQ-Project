@@ -709,6 +709,24 @@
  * checks if its \link OFIQ::QualityMeasureResult::code code\endlink member agrees with the value
  * \link OFIQ::QualityMeasureReturnCode::Success QualityMeasureReturnCode::Success\endlink.
  * 
+ * As of version 1.0.3 it is possible to access pre-processing results computed during quality assessment.
+ * Therefore, the 
+ * function \link OFIQ_LIB::OFIQImpl::vectorQualityWithPreprocessingResults vectorQualityWithPreprocessingResults\endlink is 
+ * provided. Thus, instead of invoking \link OFIQ_LIB::OFIQImpl::vectorQuality vectorQuality\endlink as above, 
+ * one can run
+ * <pre>
+ * FaceImageQualityAssessment assessment;
+ * FaceImageQualityPreprocessingResult preprocessingResult;
+ * ReturnStatus retStatus = implPtr->vectorQualityWithPreprocessingResults
+ *         (image, assessment, preprocessingResult);
+ * </pre>
+ * If successful (i.e., if <code>retStatus</code> is of 
+ * value \link OFIQ::ReturnCode::Success ReturnCode::Success\endlink), 
+ * the object <code>preprocessingResult</code> contains pre-processing results - 
+ * in addition to the quality assessment result stored in <code>assement</code>. More details can be found 
+ * in the documentation of 
+ * the \link OFIQ::FaceImageQualityPreprocessingResult FaceImageQualityPreprocessingResult\endlink struct.
+ *
  * @section sec_workflow Implementation and pre-processing workflow
  * Quality assessment is controlled by the implementation of 
  * the \link OFIQ_LIB::OFIQImpl OFIQImpl\endlink class. A shared pointer to an
@@ -729,7 +747,7 @@
  * implementation is as follows.
  * <ol>
  *  <li>
- *   Pre-processing of the input image using the \link OFIQ_LIB::OFIQImpl::performPreprocessing() OFIQImpl::performPreprocessing()\endlink function.
+ *   Pre-processing of the input image using the \link OFIQ_LIB::OFIQImpl::preprocess OFIQImpl::preprocess()\endlink function.
  *   <ol>
  *    <li>Face detection implemented by \link OFIQ_LIB::modules::detectors::SSDFaceDetector::UpdateFaces() SSDFaceDetector::UpdateFaces()\endlink</li>.
  *    <li>Pose estimation implemented by \link OFIQ_LIB::modules::poseEstimators::HeadPose3DDFAV2::updatePose() HeadPose3DDFAV2::updatePose()\endlink</li>.
@@ -983,8 +1001,20 @@
  *            }, ...
  * </pre>
  *
+ * @section sec_image_formats Supported image file formats
+ * Using the function \link OFIQ_LIB::readImage OFIQ_LIB::readImage()\endlink image
+ * files can be read. The same file formats are supported as those supported by the
+ * linked OpenCV compilation. Per default, when building OFIQ with Conan,
+ * OpenCV is built with the support of the following formats: BMP, PNG, JPG, JPEG2000, HDR, PBM, PGM, PNM, PPM.
+ * Per default, the following formats are not supported: TIF, RAS, RS, WEBP.
+ *
+ * @section sec_exif EXIF flags
+ * Using the function \link OFIQ_LIB::readImage OFIQ_LIB::readImage()\endlink image
+ * files can be read. Some formats, like JPEG, contain EXIF information. These are
+ * supported in the same way as they are supported by the linked OpenCV compilation.
+ *
  * @section sec_release_notes Release notes
- * This is OFIQ v1.0.2. 
+ * This is OFIQ v1.0.3. 
  * The following table lists all measures and its implementation provided by this release of OFIQ. Details on the 
  * configuration and on requesting measures can be found
  * @ref sec_default_config "here". Note, the QAA identifiers listed in the table are defined in ISO/IEC 29794-5.
@@ -1178,7 +1208,10 @@
  * 
  * </table>
  *
- * @subsection sec_changelog Changelog
+ *
  * @includedoc "../../CHANGELOG.md"
+ *
+ *
+ * @includedoc "../../ISSUES.md"
  */
 #pragma once

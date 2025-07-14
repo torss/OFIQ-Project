@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @briefPProvides the include statements to all classes derived from
+ * @brief Provides the include statements to all classes derived from
  * \link OFIQ_LIB::PoseEstimatorInterface
  * PoseEstimatorInterface\endlink.
  * @author OFIQ development team

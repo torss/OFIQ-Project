@@ -22,7 +22,7 @@ if(USE_CONAN)
 
 
 	# Add packages from conan
-	find_package(OpenCV REQUIRED COMPONENTS core calib3d imgcodecs imgproc highgui dnn ml)
+	find_package(OpenCV REQUIRED COMPONENTS core calib3d imgcodecs imgproc dnn ml)
 	find_package(taocpp-json REQUIRED)
 	find_package(magic_enum REQUIRED)
 
@@ -64,10 +64,6 @@ else(USE_CONAN)
 	if (CMAKE_BUILD_TYPE STREQUAL Debug)
 		SET(DEBUG_POSTFIX d)
 	endif()
-	add_library(IlmImf STATIC IMPORTED)
-	set_target_properties(IlmImf PROPERTIES
-		IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/${OPENCV_INSTALL_PATH}staticlib/IlmImf${DEBUG_POSTFIX}.lib"
-	)
 	add_library(ittnotify STATIC IMPORTED)
 	set_target_properties(ittnotify PROPERTIES
 		IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/${OPENCV_INSTALL_PATH}staticlib/ittnotify${DEBUG_POSTFIX}.lib"
@@ -112,11 +108,6 @@ else(USE_CONAN)
 		IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/${OPENCV_INSTALL_PATH}staticlib/opencv_imgproc455${DEBUG_POSTFIX}.lib"
 		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/include"
 	)
-	add_library(OpenCV::highgui STATIC IMPORTED)
-	set_target_properties(OpenCV::highgui PROPERTIES
-		IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/${OPENCV_INSTALL_PATH}staticlib/opencv_highgui455${DEBUG_POSTFIX}.lib"
-		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/include"
-	)
 	add_library(OpenCV::dnn STATIC IMPORTED)
 	set_target_properties(OpenCV::dnn PROPERTIES
 		IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/extern/opencv-4.5.5/build/install/${OPENCV_INSTALL_PATH}staticlib/opencv_dnn455${DEBUG_POSTFIX}.lib"
@@ -153,7 +144,6 @@ if(USE_CONAN)
 	)
 else(USE_CONAN)
 	list(APPEND OFIQ_LINK_LIB_LIST
-		IlmImf
 		ittnotify
 		libjpeg-turbo
 		libopenjp2
@@ -164,7 +154,6 @@ else(USE_CONAN)
 		OpenCV::calib3d
 		OpenCV::imgcodecs
 		OpenCV::imgproc
-		OpenCV::highgui
 		OpenCV::dnn
 		OpenCV::ml
 		OpenCV::features2d

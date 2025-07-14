@@ -54,8 +54,8 @@ namespace OFIQ_LIB::modules::measures
          * @brief Assesses uniformity of the background.
          * @details Assessment of the background uniformity is done by computing the mean of the background
          * as per face parsing (see \link OFIQ_LIB::modules::segmentations::FaceParsing \endlink).
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing() 
-         * OFIQImpl::performPreprocessing() \endlink.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink.
          */
         void Execute(OFIQ_LIB::Session & session) override;
 

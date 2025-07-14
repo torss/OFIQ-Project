@@ -51,8 +51,8 @@ namespace OFIQ_LIB::modules::measures
          * @brief Assesses head pose measure.
          * @details Quality components are computed with the help of the cosine 
 		 * of the native quality scores (angles).
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing() 
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess 
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
     };

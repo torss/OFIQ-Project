@@ -48,27 +48,49 @@
  */
 namespace OFIQ
 {
+    /**
+     * @brief Encodes flags and mask to request preprocessing
+     * results.
+     * @see \link OFIQ_LIB::OFIQImpl::vectorQualityWithPreprocessingResults OFIQImpl::vectorQualityWithPreprocessingResults\endlink
+     */
     enum class PreprocessingResultType
     {
-        // Flag to request no preprocessing data
+        // NOTE: Don't use one-line comments here; otherwise
+        // Doxygen does not transfer parse them.
+
+        /** 
+         *Flag to request no preprocessing data
+         */
         None = 0x0,
 
-        // Flag to request detected faces
+        /**
+         * Flag to request detected faces
+         */
         Faces = 0x1,
 
-        // Flag to request landmarks
+        /**
+         * Flag to request landmarks
+         */
         Landmarks = 0x2,
 
-        // Flag to request face parsing segmentation
+        /**
+         * Flag to request face parsing segmentation
+         */
         Segmentation = 0x4,
 
-        // Flag to request face occlusion mask
+        /**
+         * Flag to request face occlusion mask
+         */
         OcclusionMask = 0x8,
 
-        // Flag to request landmarked region
+        /**
+         * Flag to request landmarked region
+         */
         LandmarkedRegion = 0x10,
 
-        // Mask to request all available pre-processing data
+        /**
+         *Mask to request all available pre-processing data
+         */
         All = 0x1 + 0x2 + 0x4 + 0x8 + 0x10
     };
 
@@ -162,7 +184,7 @@ namespace OFIQ
          *
          * @return OFIQ::ReturnStatus
          * 
-         * @see \link OFIQ::PreprocessingResultType PreprocessingResultType\endlink
+         * @see \link OFIQ::FaceImageQualityPreprocessingResult FaceImageQualityPreprocessingResult\endlink
          */
         virtual OFIQ::ReturnStatus vectorQualityWithPreprocessingResults(
             const OFIQ::Image& image,

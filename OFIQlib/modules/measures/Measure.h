@@ -138,9 +138,6 @@ namespace OFIQ_LIB::modules::measures
         /**
          * @brief Constructor
          * @param configuration Configuration object from which measure-related configuration is read.
-         * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method
          * @param measure Enum of the measure.
          */
         Measure(const Configuration& configuration, 
@@ -155,8 +152,8 @@ namespace OFIQ_LIB::modules::measures
          * \link OFIQ_LIB::modules::measures::Measure::SetQualityMeasure() SetQualityMeasure()\endlink
          * to insert the result of quality assessment in <code>session</code>.
          * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          */
         virtual void Execute(OFIQ_LIB::Session& session) = 0;
 
@@ -186,8 +183,8 @@ namespace OFIQ_LIB::modules::measures
          * ExecuteScalarConversion()\endlink is invoked to map the native quality score to its
          * quality component value.
          * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing() 
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * computed by the \link OFIQ_LIB::OFIQImpl::preprocess 
+         * OFIQImpl::preprocess()\endlink method.
          * @param measure Enum value specifying this measure.
          * @param rawValue Native quality score
          * @param code Value indicating whether the quality assessment was computed successfully or
@@ -311,7 +308,7 @@ namespace OFIQ_LIB::modules::measures
 
         /**
          * @brief Value encoding the measure type.
-         * @details The value is set to \link OFIQ::QualityMeasure::End QualityMeasure::NotSet\endlink
+         * @details The value is set to \link OFIQ::QualityMeasure::NotSet QualityMeasure::NotSet\endlink
          * by default which effectively corresponds to a non-specified measure.
          */
         OFIQ::QualityMeasure m_measure = OFIQ::QualityMeasure::NotSet;

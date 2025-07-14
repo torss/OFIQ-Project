@@ -72,8 +72,8 @@ namespace OFIQ_LIB::modules::measures
          * @details Assessment of the abscence of compression artifact
          * (both JPEG and JPEG2000) based on a CNN trained
          * by the OFIQ development team.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session& session) override;
 

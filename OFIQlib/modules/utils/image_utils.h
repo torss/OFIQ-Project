@@ -90,16 +90,15 @@ namespace OFIQ_LIB {
 
 	/**
 	 * @brief Extracts regions being of interest for some measures (e.g. NaturalColour).
-	 * @details Details can be found in the ISO/IEC 29794-5 standard for the Natural colour
-	 * measure.
+	 * @details Applies a heuristic to estimate two regions being of interest for
+	 * the natural colour measure. More details can be found in the ISO/IEC 29794-5 standard 
+	 * for the Natural colour measure.
 	 * @param[out] leftRegionOfInterest Rectangular region corresponding to the left eye
 	 * @param[out] rightRegionOfInterest Rectangular region corresponding to the right eye
 	 * @param[in] leftEyeCenter Center of the left eye
 	 * @param[in] rightEyeCenter Center of the right eye
 	 * @param[in] interEyeDistance Planar inter-eye distance
 	 * @param[in] eyeMouthDistance Distance from the eyes' centers midpoint to the mouth
-	 * @return Applies a heuristic to estimate two regions being of interest for
-	 * the natural colour measure.
 	 */
 	OFIQ_EXPORT void CalculateRegionOfInterest(cv::Rect& leftRegionOfInterest,
 		cv::Rect& rightRegionOfInterest, 
@@ -124,8 +123,8 @@ namespace OFIQ_LIB {
 	 * Details can be found in the ISO/IEC 29794-5 standard.
      * @param session Session object containing the original facial image
 	 * and pre-processing results
-	 * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-	 * OFIQImpl::performPreprocessing()\endlink method
+	 * computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+	 * OFIQImpl::preprocess()\endlink method
 	 * @param exposureRange Range of pixels for which the aspect is computed.
 	 * @return Exposure computed from the inputs.
 	 */
