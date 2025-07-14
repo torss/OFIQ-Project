@@ -29,15 +29,15 @@ if(USE_CONAN)
 	add_library(onnxruntime SHARED IMPORTED)
 	if( ARCHITECTURE STREQUAL "x64" )
 		set_target_properties(onnxruntime PROPERTIES
-		IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x64-1.17.3/lib/onnxruntime.lib
-		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x64-1.17.3/lib/onnxruntime.dll
-		INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x64-1.17.3/include
+		IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x64-1.18.1/lib/onnxruntime.lib
+		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x64-1.18.1/lib/onnxruntime.dll
+		INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x64-1.18.1/include
 		)
 	else ()
 		set_target_properties(onnxruntime PROPERTIES
-		IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x86-1.17.3/lib/onnxruntime.lib
-		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x86-1.17.3/lib/onnxruntime.dll
-		INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x86-1.17.3/include
+		IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x86-1.18.1/lib/onnxruntime.lib
+		IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x86-1.18.1/lib/onnxruntime.dll
+		INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-win-x86-1.18.1/include
 		)
 	endif()
 else(USE_CONAN)

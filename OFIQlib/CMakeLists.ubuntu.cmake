@@ -51,9 +51,9 @@ if(USE_CONAN)
 
 	add_library(onnxruntime SHARED IMPORTED)
 	set_target_properties(onnxruntime PROPERTIES
-	IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-linux-x64-1.17.3/lib/libonnxruntime.so
-	IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-linux-x64-1.17.3/lib/libonnxruntime.so.1.17.3
-	INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-linux-x64-1.17.3/include
+	IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-linux-x64-1.18.1/lib/libonnxruntime.so
+	IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-linux-x64-1.18.1/lib/libonnxruntime.so.1.18.1
+	INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/onnxruntime-linux-x64-1.18.1/include
 	)
 else(USE_CONAN)
 	list(APPEND OFIQ_LINK_INCLUDE_LIST 

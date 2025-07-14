@@ -17,7 +17,7 @@ if /i "%1" == "--arch" set "architecture=%2"
 if /i "%1" == "--compiler" set "set_compiler=%2"
 if /i "%1" == "--debug" set config=Debug
 shift
-goto :loop
+goto loop
 :done
 
 @REM switch architecture
@@ -32,7 +32,7 @@ IF %architecture%==x86 (
   set set_architecture=-A %architecture%
 ) else (
   echo This architecture is not supported
-  goto :end
+  goto end
 )
 
 @REM  switch to compiler.version 17 based on parameter provided
@@ -45,7 +45,7 @@ IF %set_compiler%==16 (
   set vs_version="vc17"
 ) else (
   echo Building on Windows with %set_compiler% is not supported
-  goto :end
+  goto end
 )
 
 @REM build dependencies
@@ -66,7 +66,7 @@ if %use_conan%==ON (
   )
 ) else (
   if %download%==ON (
-    cmake -P ../cmake/DownloadExternalSourceCode.cmake
+    cmake -P ../cmake/DownloadExternalSourceCode.cmake || goto end
   )
   echo Building dependencies from source for %config% mode
   @REM build opencv

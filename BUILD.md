@@ -66,7 +66,7 @@ This will create the following output.
  <tr>
   <td>install_x86_64_linux/</td>
   <td>Folder with the installation including the binaries <code>Release/bin/OFIQSampleApp</code>,
-   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.17.3</code>, and the
+   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.18.1</code>, and the
    header files in <code>Release/include/</code>. </td>
  </tr>
  <tr>
@@ -130,7 +130,7 @@ This will create the following output.
  <tr>
   <td>install_x86_64_linux/</td>
   <td>Folder with the installation including the binaries <code>Release/bin/OFIQSampleApp</code>,
-   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.17.3</code>, and the
+   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.18.1</code>, and the
    header files in <code>Release/include/</code>. </td>
  </tr>
  <tr>
@@ -197,7 +197,7 @@ This will create the following output.
  <tr>
   <td>install_arm64_linux/</td>
   <td>Folder with the installation including the binaries <code>Release/bin/OFIQSampleApp</code>,
-   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.17.3</code>, and the
+   <code>Release/lib/libofiq_lib.so</code>, <code>Release/lib/libonnxruntime.so.1.18.1</code>, and the
    header files in <code>Release/include/</code>. </td>
  </tr>
  <tr>
@@ -255,7 +255,7 @@ This will create the following output.
   <td>`install_x86_64\`</td>
   <td>
    Folder with the OFIQ installation files. This includes the binaries `Release\bin\OFIQSampleApp`,
-   `Release\bin\libofiq_lib.so`, `Release\bin\libonnxruntime.so.1.17.3`, and the
+   `Release\bin\libofiq_lib.so`, `Release\bin\libonnxruntime.so.1.18.1`, and the
    header files in `Release\include\`.
    </td>
  </tr>
