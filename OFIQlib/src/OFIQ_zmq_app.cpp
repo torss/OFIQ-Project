@@ -22,6 +22,8 @@
  * SOFTWARE.
  *
  * @author Torsten Schlett
+ *
+ * @note ZmqFork-NOTE: This is an addition of the ZeroMQ/Python fork.
  */
 
 #if defined _WIN32 && defined OFIQ_EXPORTS
@@ -337,8 +339,8 @@ int process_message(void *socket, std::shared_ptr<Interface>& implPtr, std::vect
             reader.check_end(command_type);
             // Process the image:
             FaceImageQualityAssessment assessment;
-            ExposedSession session;
-            ReturnStatus retStatus = implPtr->vectorQuality(image, assessment, session);
+            ExposedSessionZmqFork session;
+            ReturnStatus retStatus = implPtr->vectorQualityZmqFork(image, assessment, session);
             // Serialize result message data:
             Writer writer;
             {

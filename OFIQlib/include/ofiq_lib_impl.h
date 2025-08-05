@@ -87,17 +87,6 @@ namespace OFIQ_LIB
             const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments) override;
 
         /**
-         * @brief Run the computation of all measures set in the configuration.
-         * 
-         * @param[in] image Input image.
-         * @param[out] assessments Container to store the resulting scores.
-         * @param[out] session Ad-hoc struct that exposes internal Session data beyond the assessments.
-         * @return OFIQ::ReturnStatus 
-         */
-        virtual OFIQ::ReturnStatus vectorQuality(
-            const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments, OFIQ::ExposedSession& session) override;
-
-        /**
          * @brief Run the computation of all measures set in the configuration 
          * and access pre-precessing result.
          *
@@ -115,6 +104,20 @@ namespace OFIQ_LIB
             OFIQ::FaceImageQualityAssessment& assessments,
             OFIQ::FaceImageQualityPreprocessingResult& preprocessingResult,
             uint32_t resultRequestsMask = static_cast<int>(OFIQ::PreprocessingResultType::All)) override;
+
+        /**
+         * @brief Run the computation of all measures set in the configuration.
+         * ZmqFork-NOTE: This is an addition of the ZeroMQ/Python fork, as marked by the "ZmqFork".
+         * 
+         * @param[in] image Input image.
+         * @param[out] assessments Container to store the resulting scores.
+         * @param[out] session Ad-hoc struct that exposes internal Session data beyond the assessments.
+         * @return OFIQ::ReturnStatus 
+         */
+        virtual OFIQ::ReturnStatus vectorQualityZmqFork(
+            const OFIQ::Image& image,
+            OFIQ::FaceImageQualityAssessment& assessments,
+            OFIQ::ExposedSessionZmqFork& session) override;
 
     private:
         /**

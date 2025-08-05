@@ -369,43 +369,43 @@ OFIQ_EXPORT void Interface::getVersion(int& major, int& minor, int& patch) const
     return;
 }
 
-ReturnStatus OFIQImpl::vectorQuality(
+ReturnStatus OFIQImpl::vectorQualityZmqFork(
     const OFIQ::Image& image,
     OFIQ::FaceImageQualityAssessment& assessments,
-    OFIQ::ExposedSession& exposedSession)
+    OFIQ::ExposedSessionZmqFork& exposedSession)
 {
     auto session = new Session(image, assessments);
     exposedSession.session = (void*)session;
     return performAssessment(*session);
 }
 
-OFIQ_EXPORT ExposedSession::~ExposedSession() {
+OFIQ_EXPORT ExposedSessionZmqFork::~ExposedSessionZmqFork() {
     delete (Session*)session;
 }
-OFIQ_EXPORT std::vector<BoundingBox> ExposedSession::getDetectedFaces() {
+OFIQ_EXPORT std::vector<BoundingBox> ExposedSessionZmqFork::getDetectedFaces() {
     return ((Session*)session)->getDetectedFaces();
 }
-OFIQ_EXPORT std::array<double, 3> ExposedSession::getPose() {
+OFIQ_EXPORT std::array<double, 3> ExposedSessionZmqFork::getPose() {
     return ((Session*)session)->getPose();
 }
-OFIQ_EXPORT FaceLandmarks ExposedSession::getLandmarks() {
+OFIQ_EXPORT FaceLandmarks ExposedSessionZmqFork::getLandmarks() {
     return ((Session*)session)->getLandmarks();
 }
-OFIQ_EXPORT FaceLandmarks ExposedSession::getAlignedFaceLandmarks() {
+OFIQ_EXPORT FaceLandmarks ExposedSessionZmqFork::getAlignedFaceLandmarks() {
     return ((Session*)session)->getAlignedFaceLandmarks();
 }
-OFIQ_EXPORT cv::Mat ExposedSession::getAlignedFaceTransformationMatrix() {
+OFIQ_EXPORT cv::Mat ExposedSessionZmqFork::getAlignedFaceTransformationMatrix() {
     return ((Session*)session)->getAlignedFaceTransformationMatrix();
 }
-OFIQ_EXPORT cv::Mat ExposedSession::getAlignedFace() {
+OFIQ_EXPORT cv::Mat ExposedSessionZmqFork::getAlignedFace() {
     return ((Session*)session)->getAlignedFace();
 }
-OFIQ_EXPORT cv::Mat ExposedSession::getAlignedFaceLandmarkedRegion() {
+OFIQ_EXPORT cv::Mat ExposedSessionZmqFork::getAlignedFaceLandmarkedRegion() {
     return ((Session*)session)->getAlignedFaceLandmarkedRegion();
 }
-OFIQ_EXPORT cv::Mat ExposedSession::getFaceParsingImage() {
+OFIQ_EXPORT cv::Mat ExposedSessionZmqFork::getFaceParsingImage() {
     return ((Session*)session)->getFaceParsingImage();
 }
-OFIQ_EXPORT cv::Mat ExposedSession::getFaceOcclusionSegmentationImage() {
+OFIQ_EXPORT cv::Mat ExposedSessionZmqFork::getFaceOcclusionSegmentationImage() {
     return ((Session*)session)->getFaceOcclusionSegmentationImage();
 }

@@ -48,10 +48,11 @@
  */
 namespace OFIQ
 {
-    struct ExposedSession {
+    // ZmqFork-NOTE: This is an addition of the ZeroMQ/Python fork, as marked by the "ZmqFork".
+    struct ExposedSessionZmqFork {
         void* session;
 
-        OFIQ_EXPORT ~ExposedSession();
+        OFIQ_EXPORT ~ExposedSessionZmqFork();
         OFIQ_EXPORT std::vector<BoundingBox> getDetectedFaces();
         OFIQ_EXPORT std::array<double, 3> getPose();
         OFIQ_EXPORT FaceLandmarks getLandmarks();
@@ -175,8 +176,9 @@ namespace OFIQ
         virtual OFIQ::ReturnStatus vectorQuality(
             const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments) = 0;
 
-                /**
+        /**
          * @brief  This function takes an image and outputs quality information.
+         * ZmqFork-NOTE: This is an addition of the ZeroMQ/Python fork, as marked by the "ZmqFork".
          *
          * @details The quality assessment should be performed on the largest detected face.
          *
@@ -196,8 +198,10 @@ namespace OFIQ
          * 
          * @return OFIQ::ReturnStatus
          */
-        virtual OFIQ::ReturnStatus vectorQuality(
-            const OFIQ::Image& image, OFIQ::FaceImageQualityAssessment& assessments, OFIQ::ExposedSession& session) = 0;
+        virtual OFIQ::ReturnStatus vectorQualityZmqFork(
+            const OFIQ::Image& image,
+            OFIQ::FaceImageQualityAssessment& assessments,
+            OFIQ::ExposedSessionZmqFork& session) = 0;
 
         /**
          * @brief  This function takes an image and outputs quality information and preprocessing results.

@@ -18,6 +18,7 @@ The single added client (`ZMQ_REQ`) is the Python module [python/ofiq_zmq.py](py
 Technically other language adapters could use the `OFIQ_zmq_app` executable as well, but there currently are no plans to implement any.
 
 **C++ file changes:** Some OFIQ C++ files have been extended to expose `OFIQ_LIB::Session` data.
+Added parts have been marked with "ZmqFork" in the C++ code.
 As a result, OpenCV is now required as a dependency for applications that use this modified OFIQ version (e.g. [OFIQSampleApp.cpp](OFIQlib/src/OFIQSampleApp.cpp) which otherwise doesn't need OpenCV). This could be fixed if required, but there currently is no plan to do so, as this is meant as a modified standalone OFIQ fork/branch that allows Python usage.
 
 **License:** Like the majority of the OFIQ code, the new Python file ([python/ofiq_zmq.py](python/ofiq_zmq.py)) and C++ file ([OFIQlib/src/OFIQ_zmq_app.cpp](OFIQlib/src/OFIQ_zmq_app.cpp)) use the MIT License (see the file headers).
