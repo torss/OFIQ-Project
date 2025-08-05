@@ -331,7 +331,7 @@ int process_message(void *socket, std::shared_ptr<Interface>& implPtr, std::vect
                 uint32_t size = width;
                 size *= height;
                 size *= 3;
-                image.data = std::shared_ptr<uint8_t>(new uint8_t[size]);
+                image.data = std::shared_ptr<uint8_t[]>(new uint8_t[size]);
                 if (!reader.read(size, image.data.get())) return -1;
             }
             reader.check_end(command_type);

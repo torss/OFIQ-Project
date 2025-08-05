@@ -54,8 +54,8 @@ namespace OFIQ_LIB::modules::measures
          * @details Assessment of the naturalness of the colour based on
          * the conversion of the RGB presentation of the image to
          * the CIELAB colour space.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
 

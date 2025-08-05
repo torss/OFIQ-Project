@@ -78,12 +78,12 @@ namespace OFIQ_LIB::modules::segmentations
          * SegmentationExtractorInterface::GetMask()\endlink. Invokes 
          * \link OFIQ_LIB::modules::segmentations::FaceOcclusionSegmentation::GetFaceOcclusionSegmentation()
          * GetFaceOcclusionSegmentation()\endlink and stores its output in the private
-         * \link OFIQ_LIB::modules::segmentations::FaceOcclusionSegmentation::segmentationImage 
-         * segmentationImage\endlink member.
+         * \link OFIQ_LIB::modules::segmentations::FaceOcclusionSegmentation::m_segmentationImage 
+         * m_segmentationImage\endlink member.
          * 
          * @param session Session object containing the original facial image and pre-processing results
-         * computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          * 
          * @param faceSegment Should be the value 
          * \link OFIQ_LIB::modules::segmentations::SegmentClassLabels::face SegmentClassLabels::face\endlink.

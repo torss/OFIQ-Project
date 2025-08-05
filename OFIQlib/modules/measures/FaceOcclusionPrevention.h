@@ -57,8 +57,8 @@ namespace OFIQ_LIB::modules::measures
          * of the marked region with the result of face occlusion segmentation 
          * computed during pre-processing. Pre-processing results are passed to the method 
          * with the <code>session</code> parameter.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          * @see \link OFIQ_LIB::modules::segmentations::FaceOcclusionSegmentation FaceOcclusionSegmentation\endlink
          */
         void Execute(OFIQ_LIB::Session & session) override;

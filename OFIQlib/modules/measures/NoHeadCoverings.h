@@ -73,8 +73,8 @@ namespace OFIQ_LIB::modules::measures
          * The ratio is the native quality score. If it exceeds a configurable
          * threshold, a quality the quality component value 0 is used; otherwise,
          * if the ratio is below (or equals) the threshold, a quality of 100 is used.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          * @see \link OFIQ_LIB::modules::segmentations::FaceParsing FaceParsing\endlink
          */
         void Execute(OFIQ_LIB::Session & session) override;

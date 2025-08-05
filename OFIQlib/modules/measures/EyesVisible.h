@@ -55,8 +55,8 @@ namespace OFIQ_LIB::modules::measures
          * the eye visibility zone with the result of face occlusion segmentation computed during pre-processing
          * by \link OFIQ_LIB::modules::segmentations::FaceOcclusionSegmentation FaceOcclusionSegmentation\endlink.
          * The pre-processing results are given by the <code>session</code> parameter.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
     };

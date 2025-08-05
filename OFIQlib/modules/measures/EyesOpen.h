@@ -53,8 +53,8 @@ namespace OFIQ_LIB::modules::measures
          * @brief Assesses eyes openness.
          * @details Eyes openness is based on computing eyes aspect ratios of both eyes 
          * from eye landmarks.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          * @see \link OFIQ_LIB::Session::getAlignedFaceLandmarks() Session::getAlignedFaceLandmarks()\endlink
          */
         void Execute(OFIQ_LIB::Session & session) override;

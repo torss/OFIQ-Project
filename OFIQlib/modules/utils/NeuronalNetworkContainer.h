@@ -1,5 +1,5 @@
 /**
- * @file NeuralNetworkContainer.h
+ * @file NeuronalNetworkContainer.h
  *
  * @copyright Copyright (c) 2024  Federal Office for Information Security, Germany
  *

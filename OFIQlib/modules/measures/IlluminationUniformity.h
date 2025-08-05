@@ -55,8 +55,8 @@ namespace OFIQ_LIB::modules::measures
          * @details Uniformity of the illumination is measured by summing
          * up the minima of the histograms of the left and the right side
          * of the face.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess()
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
     };

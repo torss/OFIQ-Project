@@ -54,8 +54,8 @@ namespace OFIQ_LIB::modules::measures
          * @details Inter-eye distance assessment is based on computing the
          * Euclidean length of both eyes' centres and multiplication with
          * the secant of the yaw angle computed during pre-processing.
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing()
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess()
+         * OFIQImpl::preprocess()\endlink method.
          */
         void Execute(OFIQ_LIB::Session & session) override;
     };

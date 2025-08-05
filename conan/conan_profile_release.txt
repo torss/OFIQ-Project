@@ -4,5 +4,6 @@ build_type=Release
 compiler=msvc
 compiler.version=192
 compiler.runtime=dynamic
+compiler.cppstd=17
 os=Windows
 [options]

@@ -60,8 +60,8 @@ namespace OFIQ_LIB::modules::detectors
         /**
          * @brief Implementation of the face detection method.
          * 
-         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::performPreprocessing() 
-         * OFIQImpl::performPreprocessing()\endlink method.
+         * @param session Session object computed by the \link OFIQ_LIB::OFIQImpl::preprocess
+         * OFIQImpl::preprocess()\endlink method.
          * @return std::vector<OFIQ::BoundingBox> Bounding boxes of the detected faces
          */
         std::vector<OFIQ::BoundingBox> UpdateFaces(OFIQ_LIB::Session& session) override;
