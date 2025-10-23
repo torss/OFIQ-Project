@@ -324,7 +324,7 @@ class Reader:
       if math.isnan(scalar_score_double):
         fiqat.term.cprint(
             'WARNING - OFIQ-ZeroMQ Reader.read_ofiq_quality_assessments'
-            f' - {str(measure_id)}'
+            f' - {repr(measure_id)}'
             ' - Unexpectedly received a NaN scalar_score_double.'
             ' Will output a -1 scalar_score_int and FAILURE_TO_ASSESS status_code.', 'yellow')
         scalar_score_int = -1
@@ -468,7 +468,7 @@ class Reader:
     if remaining_bytes != 0:
       fiqat.term.cprint(
           'WARNING - OFIQ-ZeroMQ Reader.check_end - Unexpected leftover data at the end of the message: '
-          f'{remaining_bytes} bytes ({str(command_type)})', 'yellow')
+          f'{remaining_bytes} bytes ({repr(command_type)})', 'yellow')
 
 
 def get_ofiq_dir(input_path: Path) -> Path:
@@ -718,7 +718,7 @@ def main():
   else:
     print('Quality assessment output (scalar scores):')
     for measure_id, measure_result in results['quality_assessments'].items():
-      print(f'- {str(measure_id):>52}: {measure_result.scalar_score:>3} ({str(measure_result.status_code)})')
+      print(f'- {measure_id.name:>32}: {measure_result.scalar_score:>3} ({measure_result.status_code.name})')
 
   return results
 
